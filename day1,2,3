@@ -1,0 +1,1186 @@
+Last login: Wed Apr 19 09:47:26 on ttys000
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+nirmala-pt7167:~ nirmala-pt7167$ sudo mysql -u root
+Password:
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 3
+Server version: 5.7.41 Homebrew
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> \h
+
+For information about MySQL products and services, visit:
+   http://www.mysql.com/
+For developer information, including the MySQL Reference Manual, visit:
+   http://dev.mysql.com/
+To buy MySQL Enterprise support, training, or other products, visit:
+   https://shop.mysql.com/
+
+List of all MySQL commands:
+Note that all text commands must be first on line and end with ';'
+?         (\?) Synonym for `help'.
+clear     (\c) Clear the current input statement.
+connect   (\r) Reconnect to the server. Optional arguments are db and host.
+delimiter (\d) Set statement delimiter.
+edit      (\e) Edit command with $EDITOR.
+ego       (\G) Send command to mysql server, display result vertically.
+exit      (\q) Exit mysql. Same as quit.
+go        (\g) Send command to mysql server.
+help      (\h) Display this help.
+nopager   (\n) Disable pager, print to stdout.
+notee     (\t) Don't write into outfile.
+pager     (\P) Set PAGER [to_pager]. Print the query results via PAGER.
+print     (\p) Print current command.
+prompt    (\R) Change your mysql prompt.
+quit      (\q) Quit mysql.
+rehash    (\#) Rebuild completion hash.
+source    (\.) Execute an SQL script file. Takes a file name as an argument.
+status    (\s) Get status information from the server.
+system    (\!) Execute a system shell command.
+tee       (\T) Set outfile [to_outfile]. Append everything into given outfile.
+use       (\u) Use another database. Takes database name as argument.
+charset   (\C) Switch to another charset. Might be needed for processing binlog with multi-byte charsets.
+warnings  (\W) Show warnings after every statement.
+nowarning (\w) Don't show warnings after every statement.
+resetconnection(\x) Clean session context.
+
+For server side help, type 'help contents'
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| NIRMALA            |
+| mysql              |
+| performance_schema |
+| sys                |
+| tutorial           |
++--------------------+
+6 rows in set (0.00 sec)
+
+mysql> USE NIRMALA;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SELECT * FROM BOOKS
+    -> ;
++-----+-----------+--------+
+| ID  | TITLE     | NUM_PG |
++-----+-----------+--------+
+| 100 | Homefront |    245 |
++-----+-----------+--------+
+1 row in set (0.00 sec)
+
+mysql> DESCRIBE BOOKS;
++--------+----------------------+------+-----+---------+----------------+
+| Field  | Type                 | Null | Key | Default | Extra          |
++--------+----------------------+------+-----+---------+----------------+
+| ID     | bigint(20)           | NO   | PRI | NULL    | auto_increment |
+| TITLE  | varchar(100)         | NO   |     | NULL    |                |
+| NUM_PG | smallint(5) unsigned | YES  |     | NULL    |                |
++--------+----------------------+------+-----+---------+----------------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO BOOKS(TITLE) VALUES('Charlotte's Web');
+    '> INSERT INTO BOOKS(TITLE) VALUES('Charlotte's Web');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 's Web');
+INSERT INTO BOOKS(TITLE) VALUES('Charlotte's Web')' at line 1
+mysql> INSERT INTO BOOKS(TITLE) VALUES('Charlotte''s Web');                                                                                                           
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM BOOKS;
++-----+-----------------+--------+
+| ID  | TITLE           | NUM_PG |
++-----+-----------------+--------+
+| 100 | Homefront       |    245 |
+| 101 | Charlotte's Web |   NULL |
++-----+-----------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO BOOKS(TILE) VALUES('Charlotte''s Web');;
+ERROR 1054 (42S22): Unknown column 'TILE' in 'field list'
+mysql> INSERT INTO BOOKS(NUM_PG) VALUES(100);
+ERROR 1364 (HY000): Field 'TITLE' doesn't have a default value
+mysql> INSERT INTO BOOKS(NUM_PG) VALUES(100); \C
+ERROR 1364 (HY000): Field 'TITLE' doesn't have a default value
+ERROR: 
+Usage: \C charset_name | charset charset_name
+mysql> UPDATE BOOKS
+    -> SET NUM_PG=102
+    -> WHERE ID=101;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM BOOKS;
++-----+-----------------+--------+
+| ID  | TITLE           | NUM_PG |
++-----+-----------------+--------+
+| 100 | Homefront       |    245 |
+| 101 | Charlotte's Web |    102 |
++-----+-----------------+--------+
+2 rows in set (0.00 sec)
+
+mysql> CREATE TABLE FLOAT1(NO SMALLINT PRIMARY KEY, D1 DOUBLE, D2 DOUBLE);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO FLOAT1 VALUES (1,100.40,20.40),(2,-80.00,0.00);
+Query OK, 2 rows affected (0.01 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM FLOAT1;
++----+-------+------+
+| NO | D1    | D2   |
++----+-------+------+
+|  1 | 100.4 | 20.4 |
+|  2 |   -80 |    0 |
++----+-------+------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT SUM(D1), SUM(D2) FROM FLOAT1;
++--------------------+---------+
+| SUM(D1)            | SUM(D2) |
++--------------------+---------+
+| 20.400000000000006 |    20.4 |
++--------------------+---------+
+1 row in set (0.00 sec)
+
+mysql> CREATE TABLE FLOAT2(NO SMALLINT PRIMARY KEY, D1 DECIMAL(10,2), D2 NUMERIC(10,2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> CREATE TABLE FLOAT2(NO SMALLINT PRIMARY KEY, D1 DECIMAL(10,2), D2 DECIMAL(10,2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> CREATE TABLE FLOAT2(NO SMALLINT PRIMARY KEY, D1 NUMERIC(10,2), D2 NUMERIC(10,2);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> DROP TABLE FLOAT1;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE FLOAT1(NO SMALLINT PRIMARY KEY, D1 DECIMAL(5,2), D2 DECIMAL(4,2));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT * FROM FLOAT1;
+Empty set (0.00 sec)
+
+mysql> INSERT INTO FLOAT1 VALUES (1,100.40,20.40),(2,-080.00,00.00);
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM FLOAT1;
++----+--------+-------+
+| NO | D1     | D2    |
++----+--------+-------+
+|  1 | 100.40 | 20.40 |
+|  2 | -80.00 |  0.00 |
++----+--------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT SUM(D1), SUM(D2) FROM FLOAT1;
++---------+---------+
+| SUM(D1) | SUM(D2) |
++---------+---------+
+|   20.40 |   20.40 |
++---------+---------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO FLOAT1 VALUES (3,90,2);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM FLOAT1;
++----+--------+-------+
+| NO | D1     | D2    |
++----+--------+-------+
+|  1 | 100.40 | 20.40 |
+|  2 | -80.00 |  0.00 |
+|  3 |  90.00 |  2.00 |
++----+--------+-------+
+3 rows in set (0.00 sec)
+
+mysql> CREATE TABLE STRINGS1(FIXED_NAME CHAR(100), VAR_NAME VARCHAR(100)
+    -> \C
+ERROR: 
+Usage: \C charset_name | charset charset_name
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> CREATE TABLE STRINGS1(FIXED_NAME CHAR(100), VAR_NAME VARCHAR(100)); #-- 100 bytes "Nirmala          "   6 bytes+1byte(to say how many character) "Nirmala"
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DESCRIBE STRINGS1;
++------------+--------------+------+-----+---------+-------+
+| Field      | Type         | Null | Key | Default | Extra |
++------------+--------------+------+-----+---------+-------+
+| FIXED_NAME | char(100)    | YES  |     | NULL    |       |
+| VAR_NAME   | varchar(100) | YES  |     | NULL    |       |
++------------+--------------+------+-----+---------+-------+
+2 rows in set (0.00 sec)
+
+mysql> SHOW CREATE TABLE STRINGS1;
++----------+----------------------------------------------------------------------------------------------------------------------------------------------+
+| Table    | Create Table                                                                                                                                 |
++----------+----------------------------------------------------------------------------------------------------------------------------------------------+
+| STRINGS1 | CREATE TABLE `STRINGS1` (
+  `FIXED_NAME` char(100) DEFAULT NULL,
+  `VAR_NAME` varchar(100) DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 |
++----------+----------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.01 sec)
+
+mysql> SELECT * FROM information_schema.CHARACTER_SETS ORDER BY CHARACTER_SET_NAME;
++--------------------+----------------------+---------------------------------+--------+
+| CHARACTER_SET_NAME | DEFAULT_COLLATE_NAME | DESCRIPTION                     | MAXLEN |
++--------------------+----------------------+---------------------------------+--------+
+| armscii8           | armscii8_general_ci  | ARMSCII-8 Armenian              |      1 |
+| ascii              | ascii_general_ci     | US ASCII                        |      1 |
+| big5               | big5_chinese_ci      | Big5 Traditional Chinese        |      2 |
+| binary             | binary               | Binary pseudo charset           |      1 |
+| cp1250             | cp1250_general_ci    | Windows Central European        |      1 |
+| cp1251             | cp1251_general_ci    | Windows Cyrillic                |      1 |
+| cp1256             | cp1256_general_ci    | Windows Arabic                  |      1 |
+| cp1257             | cp1257_general_ci    | Windows Baltic                  |      1 |
+| cp850              | cp850_general_ci     | DOS West European               |      1 |
+| cp852              | cp852_general_ci     | DOS Central European            |      1 |
+| cp866              | cp866_general_ci     | DOS Russian                     |      1 |
+| cp932              | cp932_japanese_ci    | SJIS for Windows Japanese       |      2 |
+| dec8               | dec8_swedish_ci      | DEC West European               |      1 |
+| eucjpms            | eucjpms_japanese_ci  | UJIS for Windows Japanese       |      3 |
+| euckr              | euckr_korean_ci      | EUC-KR Korean                   |      2 |
+| gb18030            | gb18030_chinese_ci   | China National Standard GB18030 |      4 |
+| gb2312             | gb2312_chinese_ci    | GB2312 Simplified Chinese       |      2 |
+| gbk                | gbk_chinese_ci       | GBK Simplified Chinese          |      2 |
+| geostd8            | geostd8_general_ci   | GEOSTD8 Georgian                |      1 |
+| greek              | greek_general_ci     | ISO 8859-7 Greek                |      1 |
+| hebrew             | hebrew_general_ci    | ISO 8859-8 Hebrew               |      1 |
+| hp8                | hp8_english_ci       | HP West European                |      1 |
+| keybcs2            | keybcs2_general_ci   | DOS Kamenicky Czech-Slovak      |      1 |
+| koi8r              | koi8r_general_ci     | KOI8-R Relcom Russian           |      1 |
+| koi8u              | koi8u_general_ci     | KOI8-U Ukrainian                |      1 |
+| latin1             | latin1_swedish_ci    | cp1252 West European            |      1 |
+| latin2             | latin2_general_ci    | ISO 8859-2 Central European     |      1 |
+| latin5             | latin5_turkish_ci    | ISO 8859-9 Turkish              |      1 |
+| latin7             | latin7_general_ci    | ISO 8859-13 Baltic              |      1 |
+| macce              | macce_general_ci     | Mac Central European            |      1 |
+| macroman           | macroman_general_ci  | Mac West European               |      1 |
+| sjis               | sjis_japanese_ci     | Shift-JIS Japanese              |      2 |
+| swe7               | swe7_swedish_ci      | 7bit Swedish                    |      1 |
+| tis620             | tis620_thai_ci       | TIS620 Thai                     |      1 |
+| ucs2               | ucs2_general_ci      | UCS-2 Unicode                   |      2 |
+| ujis               | ujis_japanese_ci     | EUC-JP Japanese                 |      3 |
+| utf16              | utf16_general_ci     | UTF-16 Unicode                  |      4 |
+| utf16le            | utf16le_general_ci   | UTF-16LE Unicode                |      4 |
+| utf32              | utf32_general_ci     | UTF-32 Unicode                  |      4 |
+| utf8               | utf8_general_ci      | UTF-8 Unicode                   |      3 |
+| utf8mb4            | utf8mb4_general_ci   | UTF-8 Unicode                   |      4 |
++--------------------+----------------------+---------------------------------+--------+
+41 rows in set (0.00 sec)
+
+mysql> CREATE TABLE BINARY1(
+    -> FIXED_BINARY BINARY(20)
+    -> VAR_BINARY VARBINARY(100));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'VAR_BINARY VARBINARY(100))' at line 3
+mysql> CREATE TABLE BINARY1( FIXED_BINARY BINARY(20), VAR_BINARY VARBINARY(100));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT MD5('HELLO');
++----------------------------------+
+| MD5('HELLO')                     |
++----------------------------------+
+| eb61eead90e3b899c6bcbe27ac581660 |
++----------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT UNHEX(MD5('HELLO'));
++---------------------+
+| UNHEX(MD5('HELLO')) |
++---------------------+
+| ?a㸙Ƽ?'?X`           |
++---------------------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO BINARY1 VALUES(UNHEX(MD5('HELLO')),UNHEX(MD5('HELLO')));
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM BINARY1;
++----------------------+------------------+
+| FIXED_BINARY         | VAR_BINARY       |
++----------------------+------------------+
+| ?a㸙Ƽ?'?X`            | ?a㸙Ƽ?'?X`        |
++----------------------+------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT HEX(FIXED_BINARY) FROM BINARY1;
++------------------------------------------+
+| HEX(FIXED_BINARY)                        |
++------------------------------------------+
+| EB61EEAD90E3B899C6BCBE27AC58166000000000 |
++------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT HEX(VAR_BINARY) FROM BINARY1;
++----------------------------------+
+| HEX(VAR_BINARY)                  |
++----------------------------------+
+| EB61EEAD90E3B899C6BCBE27AC581660 |
++----------------------------------+
+1 row in set (0.00 sec)
+
+mysql> CREATE TABLE ORDERS(
+    -> SERIAL_ID SMALLINT,
+    -> SIZE ENUM('X-SMALL','SMALL','MEDIUM','LARGE','X-LARGE');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 3
+mysql> CREATE TABLE ORDERS( SERIAL_ID SMALLINT, SIZE ENUM('X-SMALL','SMALL','MEDIUM','LARGE','X-LARGE'));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO ORDERS (1,'SMALL');
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '1,'SMALL')' at line 1
+mysql> INSERT INTO ORDERS VALUES (1,'SMALL');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELCT * FROM ORDERS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELCT * FROM ORDERS' at line 1
+mysql> SELECT * FROM ORDERS;
++-----------+-------+
+| SERIAL_ID | SIZE  |
++-----------+-------+
+|         1 | SMALL |
++-----------+-------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO ORDERS VALUES ((2,'X-LARGE'),(3,'MEDIUM'));
+ERROR 1241 (21000): Operand should contain 1 column(s)
+mysql> INSERT INTO ORDERS VALUES (2,'X-LARGE'),(3,'MEDIUM');
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM ORDERS;
++-----------+---------+
+| SERIAL_ID | SIZE    |
++-----------+---------+
+|         1 | SMALL   |
+|         2 | X-LARGE |
+|         3 | MEDIUM  |
++-----------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT SIZE+0 FROM ORDERS; #cast size to an intger. maps list from 1
++--------+
+| SIZE+0 |
++--------+
+|      2 |
+|      5 |
+|      3 |
++--------+
+3 rows in set (0.00 sec)
+
+mysql> INSERT INTO ORDERS VALUES (4,'X-SMALL');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM ORDERS;
++-----------+---------+
+| SERIAL_ID | SIZE    |
++-----------+---------+
+|         1 | SMALL   |
+|         2 | X-LARGE |
+|         3 | MEDIUM  |
+|         4 | X-SMALL |
++-----------+---------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT SIZE FROM ORDERS ORDER BY SIZE ASC; #Orders acc to underling list index numbers
++---------+
+| SIZE    |
++---------+
+| X-SMALL |
+| SMALL   |
+| MEDIUM  |
+| X-LARGE |
++---------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT SIZE+0,SIZE FROM ORDERS ORDER BY SIZE ASC; #Orders acc to underling list index numbers
++--------+---------+
+| SIZE+0 | SIZE    |
++--------+---------+
+|      1 | X-SMALL |
+|      2 | SMALL   |
+|      3 | MEDIUM  |
+|      5 | X-LARGE |
++--------+---------+
+4 rows in set (0.00 sec)
+
+mysql> CREATE TABLE TIMEZONE_TEST(
+    -> DATE_TIME DATETIME NULL,
+    -> TIME_STAMP TIMESTAMP NULL
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO TIMEZONE_TEST VALUES('2023-04-19 00:00:00','2023-04-19 00:00:00');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM TIMEZONE_TEST;
++---------------------+---------------------+
+| DATE_TIME           | TIME_STAMP          |
++---------------------+---------------------+
+| 2023-04-19 00:00:00 | 2023-04-19 00:00:00 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> SET SESSION TIME_ZONE='+05:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM TIMEZONE_TEST;
++---------------------+---------------------+
+| DATE_TIME           | TIME_STAMP          |
++---------------------+---------------------+
+| 2023-04-19 00:00:00 | 2023-04-18 23:30:00 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> SET SESSION TIME_ZONE='+00:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM TIMEZONE_TEST;
++---------------------+---------------------+
+| DATE_TIME           | TIME_STAMP          |
++---------------------+---------------------+
+| 2023-04-19 00:00:00 | 2023-04-18 18:30:00 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> SET SESSION TIME_ZONE='-05:00';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT * FROM TIMEZONE_TEST;
++---------------------+---------------------+
+| DATE_TIME           | TIME_STAMP          |
++---------------------+---------------------+
+| 2023-04-19 00:00:00 | 2023-04-18 13:30:00 |
++---------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> CREATE TABLE TIME1( ID SERIAL, CREATED_TIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP, UPDATED_TIME TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP); 
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO TIME1 (ID) VALUES (1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM TIME1;
++----+---------------------+---------------------+
+| ID | CREATED_TIME        | UPDATED_TIME        |
++----+---------------------+---------------------+
+|  1 | 2023-04-19 00:55:13 | 2023-04-19 00:55:13 |
++----+---------------------+---------------------+
+1 row in set (0.00 sec)
+
+mysql> INSERT INTO TIME1 (ID) VALUES (2);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM TIME1;
++----+---------------------+---------------------+
+| ID | CREATED_TIME        | UPDATED_TIME        |
++----+---------------------+---------------------+
+|  1 | 2023-04-19 00:55:13 | 2023-04-19 00:55:13 |
+|  2 | 2023-04-19 00:56:36 | 2023-04-19 00:56:36 |
++----+---------------------+---------------------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO TIME1 (ID) VALUES (3);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM TIME1;
++----+---------------------+---------------------+
+| ID | CREATED_TIME        | UPDATED_TIME        |
++----+---------------------+---------------------+
+|  1 | 2023-04-19 00:55:13 | 2023-04-19 00:55:13 |
+|  2 | 2023-04-19 00:56:36 | 2023-04-19 00:56:36 |
+|  3 | 2023-04-19 00:57:30 | 2023-04-19 00:57:30 |
++----+---------------------+---------------------+
+3 rows in set (0.00 sec)
+
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| BINARY1           |
+| BOOKS             |
+| FLOAT1            |
+| ORDERS            |
+| STRINGS1          |
+| TIME1             |
+| TIMEZONE_TEST     |
++-------------------+
+7 rows in set (0.00 sec)
+
+mysql> SELECT TITLE
+    -> FROM BOOKS;
++-----------------+
+| TITLE           |
++-----------------+
+| Homefront       |
+| Charlotte's Web |
++-----------------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO BOOKS(TITLE,NUM_PG) VALUES
+    -> ('Harry Potter and the Philosopher''s Stone',232),
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 2
+mysql> ALTER TABLE BOOKS
+    -> ADD AUTHOR VARCHAR(100), PRICE MEDIUMINT ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'PRICE MEDIUMINT' at line 2
+mysql> ALTER TABLE BOOKS ADD AUTHOR VARCHAR(100);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE BOOKS ADD PRICE MEDIUMINT;
+Query OK, 0 rows affected (0.09 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM BOOKS;
++-----+-----------------+--------+--------+-------+
+| ID  | TITLE           | NUM_PG | AUTHOR | PRICE |
++-----+-----------------+--------+--------+-------+
+| 100 | Homefront       |    245 | NULL   |  NULL |
+| 101 | Charlotte's Web |    102 | NULL   |  NULL |
++-----+-----------------+--------+--------+-------+
+2 rows in set (0.00 sec)
+
+mysql> UPDATE BOOKS
+    -> SET AUTHOR='Kristin Hannah'
+    -> WHERE ID=100;
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE BOOKS SET AUTHOR='E.B. White', PRICE=299 WHERE ID=101;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+mysql> UPDATE BOOKS SET AUTHOR='J.K. Rowling', PRICE=399 WHERE ID=102;
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 0  Changed: 0  Warnings: 0
+
+mysql> SELECT * FROM BOOKS;
++-----+-----------------+--------+----------------+-------+
+| ID  | TITLE           | NUM_PG | AUTHOR         | PRICE |
++-----+-----------------+--------+----------------+-------+
+| 100 | Homefront       |    245 | Kristin Hannah |  NULL |
+| 101 | Charlotte's Web |    102 | E.B. White     |   299 |
++-----+-----------------+--------+----------------+-------+
+2 rows in set (0.01 sec)
+
+mysql> CREATE TABLE STUDENTS(
+    -> ID CHAR(3) PRIMARY KEY,
+    -> FNAME VARCHAR(50) NOT NULL,
+    -> LNAME VARCHAR(70),
+    -> DOB DATE,
+    -> DEPT_CODE CHAR(4),
+    -> GENDER ENUM('M','F','O')
+    -> FEES INT DEFAULT 5000;
+mysql> CREATE TABLE STUDENTS( ID CHAR(3) PRIMARY KEY, FNAME VARCHAR(50) NOT NULL, LNAME VARCHAR(70), DOB DATE, DEPT_CODE CHAR(4), GENDER ENUM('M','F','O'), FEES INT DEFAULT 5000;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> CREATE TABLE STUDENTS( ID CHAR(3) PRIMARY KEY, FNAME VARCHAR(50) NOT NULL, LNAME VARCHAR(70), DOB DATE, DEPT_CODE CHAR(4), GENDER ENUM('M','F','O'), FEES INT DEFAULT 5000);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESCRIBE STUDENTS;
++-----------+-------------------+------+-----+---------+-------+
+| Field     | Type              | Null | Key | Default | Extra |
++-----------+-------------------+------+-----+---------+-------+
+| ID        | char(3)           | NO   | PRI | NULL    |       |
+| FNAME     | varchar(50)       | NO   |     | NULL    |       |
+| LNAME     | varchar(70)       | YES  |     | NULL    |       |
+| DOB       | date              | YES  |     | NULL    |       |
+| DEPT_CODE | char(4)           | YES  |     | NULL    |       |
+| GENDER    | enum('M','F','O') | YES  |     | NULL    |       |
+| FEES      | int(11)           | YES  |     | 5000    |       |
++-----------+-------------------+------+-----+---------+-------+
+7 rows in set (0.00 sec)
+
+mysql> INSERT INTO STUDENTS
+    -> VALUES
+    -> (S01,'Lalit','Dubey','1999-01-06','CS01','M',DEFAULT),
+    -> (S01,'Priya','Kumari','1998-12-04','EE01','F',DEFAULT),
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 4
+mysql> INSERT INTO STUDENTS VALUES (S01,'Lalit','Dubey','1999-01-06','CS01','M',DEFAULT), (S02,'Priya','Kumari','1998-12-04','EE01','F',DEFAULT+500);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '+500)' at line 1
+mysql> INSERT INTO STUDENTS VALUES (S01,'Lalit','Dubey','1999-01-06','CS01','M',DEFAULT), (S02,'Priya','Kumari','1998-12-04','EE01','F',DEFAULT);
+ERROR 1054 (42S22): Unknown column 'S01' in 'field list'
+mysql> INSERT INTO STUDENTS VALUES ('S01','Lalit','Dubey','1999-01-06','CS01','M',DEFAULT), ('S02','Priya','Kumari','1998-12-04','EE01','F',DEFAULT);
+Query OK, 2 rows affected (0.00 sec)
+Records: 2  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENTS;
++-----+-------+--------+------------+-----------+--------+------+
+| ID  | FNAME | LNAME  | DOB        | DEPT_CODE | GENDER | FEES |
++-----+-------+--------+------------+-----------+--------+------+
+| S01 | Lalit | Dubey  | 1999-01-06 | CS01      | M      | 5000 |
+| S02 | Priya | Kumari | 1998-12-04 | EE01      | F      | 5000 |
++-----+-------+--------+------------+-----------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENTS ADD ROLL_NO SMALLINT AUTO_INCREMENT ;
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> CREATE TABLE EE_CLASS(
+    -> ROLL_NO SMALLINT AUTO_INCREMENT,
+    -> NAME VARCHAR(50));
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> CREATE TABLE EE_CLASS( ROLL_NO SMALLINT AUTO_INCREMENT, NAME VARCHAR(50), PRIMARY KEY(ROLL_NO));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DESCRIBE EE_CLASS;
++---------+-------------+------+-----+---------+----------------+
+| Field   | Type        | Null | Key | Default | Extra          |
++---------+-------------+------+-----+---------+----------------+
+| ROLL_NO | smallint(6) | NO   | PRI | NULL    | auto_increment |
+| NAME    | varchar(50) | YES  |     | NULL    |                |
++---------+-------------+------+-----+---------+----------------+
+2 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENTS
+    -> ADD ROLL_NO SMALL INT
+    -> [AFTER ID]
+mysql> ALTER TABLE STUDENTS ADD ROLL_NO SMALLINT AFTER ID;
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENTS;
++-----+---------+-------+--------+------------+-----------+--------+------+
+| ID  | ROLL_NO | FNAME | LNAME  | DOB        | DEPT_CODE | GENDER | FEES |
++-----+---------+-------+--------+------------+-----------+--------+------+
+| S01 |    NULL | Lalit | Dubey  | 1999-01-06 | CS01      | M      | 5000 |
+| S02 |    NULL | Priya | Kumari | 1998-12-04 | EE01      | F      | 5000 |
++-----+---------+-------+--------+------------+-----------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> UPDATE STUDENTS
+    -> SET
+    -> ROLL_NO=1001
+    -> WHERE ID=S01;
+ERROR 1054 (42S22): Unknown column 'S01' in 'where clause'
+mysql> UPDATE STUDENTS SET ROLL_NO=1001 WHERE ID='S01';
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> UPDATE STUDENTS SET ROLL_NO=1002 WHERE ID='S02';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM STUDENTS;
++-----+---------+-------+--------+------------+-----------+--------+------+
+| ID  | ROLL_NO | FNAME | LNAME  | DOB        | DEPT_CODE | GENDER | FEES |
++-----+---------+-------+--------+------------+-----------+--------+------+
+| S01 |    1001 | Lalit | Dubey  | 1999-01-06 | CS01      | M      | 5000 |
+| S02 |    1002 | Priya | Kumari | 1998-12-04 | EE01      | F      | 5000 |
++-----+---------+-------+--------+------------+-----------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> RENAME TABLE EE_CLASS TO EE_CLASS_DETAILS;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SELECT IF(COUNT(*)=1, 'Exist','Not Exist') AS RESULT
+    -> FROM INFORMATION_SCHEMA.COLUMNS
+    -> WHERE
+    -> TABLE_SCHEMA='NIRMALA'
+    -> AND TABLE_NAME='STUDENTS'
+    -> AND COLUMN_NAME='PHONE';
++-----------+
+| RESULT    |
++-----------+
+| Not Exist |
++-----------+
+1 row in set (0.01 sec)
+
+mysql> INSERT INTO EE_CLASS_DETAILS(ROLL_NO,NAME)                                                                                                                         -> SELECT ROLL_NO,FNAME
+    -> FROM STUDENTS
+    -> WHERE DEPT_CODE LIKE 'EE%';
+Query OK, 1 row affected (0.01 sec)
+Records: 1  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM EE_CLASS_DETAILS;
++---------+-------+
+| ROLL_NO | NAME  |
++---------+-------+
+|    1002 | Priya |
++---------+-------+
+1 row in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENTS
+    -> ADD PHONE INT;
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE STUDENTS;
++-----------+-------------------+------+-----+---------+-------+
+| Field     | Type              | Null | Key | Default | Extra |
++-----------+-------------------+------+-----+---------+-------+
+| ID        | char(3)           | NO   | PRI | NULL    |       |
+| ROLL_NO   | smallint(6)       | YES  |     | NULL    |       |
+| FNAME     | varchar(50)       | NO   |     | NULL    |       |
+| LNAME     | varchar(70)       | YES  |     | NULL    |       |
+| DOB       | date              | YES  |     | NULL    |       |
+| DEPT_CODE | char(4)           | YES  |     | NULL    |       |
+| GENDER    | enum('M','F','O') | YES  |     | NULL    |       |
+| FEES      | int(11)           | YES  |     | 5000    |       |
+| PHONE     | int(11)           | YES  |     | NULL    |       |
++-----------+-------------------+------+-----+---------+-------+
+9 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENTS DROP COLUMN PHONE;
+Query OK, 0 rows affected (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE STUDENTS;
++-----------+-------------------+------+-----+---------+-------+
+| Field     | Type              | Null | Key | Default | Extra |
++-----------+-------------------+------+-----+---------+-------+
+| ID        | char(3)           | NO   | PRI | NULL    |       |
+| ROLL_NO   | smallint(6)       | YES  |     | NULL    |       |
+| FNAME     | varchar(50)       | NO   |     | NULL    |       |
+| LNAME     | varchar(70)       | YES  |     | NULL    |       |
+| DOB       | date              | YES  |     | NULL    |       |
+| DEPT_CODE | char(4)           | YES  |     | NULL    |       |
+| GENDER    | enum('M','F','O') | YES  |     | NULL    |       |
+| FEES      | int(11)           | YES  |     | 5000    |       |
++-----------+-------------------+------+-----+---------+-------+
+8 rows in set (0.00 sec)
+
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| BINARY1           |
+| BOOKS             |
+| EE_CLASS_DETAILS  |
+| FLOAT1            |
+| ORDERS            |
+| STRINGS1          |
+| STUDENTS          |
+| TIME1             |
+| TIMEZONE_TEST     |
++-------------------+
+9 rows in set (0.00 sec)
+
+mysql> DROP TABLE IF EXISTS TEST;
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> DROP TABLE IF EXISTS FLOAT1;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| BINARY1           |
+| BOOKS             |
+| EE_CLASS_DETAILS  |
+| ORDERS            |
+| STRINGS1          |
+| STUDENTS          |
+| TIME1             |
+| TIMEZONE_TEST     |
++-------------------+
+8 rows in set (0.00 sec)
+
+mysql> CREATE TABLE TEST1(ID INT);
+Query OK, 0 rows affected (0.04 sec)
+
+mysql> CREATE TABLE TEST2(NAME VARCHAR(10));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| BINARY1           |
+| BOOKS             |
+| EE_CLASS_DETAILS  |
+| ORDERS            |
+| STRINGS1          |
+| STUDENTS          |
+| TEST1             |
+| TEST2             |
+| TIME1             |
+| TIMEZONE_TEST     |
++-------------------+
+10 rows in set (0.00 sec)
+
+mysql> CREATE TABLE IF NOT EXISTS TEST3 LIKE TEST1;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| BINARY1           |
+| BOOKS             |
+| EE_CLASS_DETAILS  |
+| ORDERS            |
+| STRINGS1          |
+| STUDENTS          |
+| TEST1             |
+| TEST2             |
+| TEST3             |
+| TIME1             |
+| TIMEZONE_TEST     |
++-------------------+
+11 rows in set (0.01 sec)
+
+mysql> SET @SCHEMA='NIRMALA';#database name
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SET @PATTERN='TEST%';
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SELECT CONCAT('DROP TABLE ', GROUP_CONCAT(CONCAT(@SCHEMA,'.',TABLE_NAME)),';')
+    -> INTO @DROPLIKE
+    -> FROM INFORMATION_SCHEMA.TABLES
+    -> WHERE @SCHEMA=DATABASE()
+    -> AND TABLE_NAME LIKE @PATTERN;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT @DROPLIKE;
++-------------------------------------------------------+
+| @DROPLIKE                                             |
++-------------------------------------------------------+
+| DROP TABLE NIRMALA.TEST1,NIRMALA.TEST2,NIRMALA.TEST3; |
++-------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> PREPARE stmt FROM @droplike;
+Query OK, 0 rows affected (0.00 sec)
+Statement prepared
+
+mysql> EXECUTE stmt;
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DEALLOCATE PREPARE stmt;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| BINARY1           |
+| BOOKS             |
+| EE_CLASS_DETAILS  |
+| ORDERS            |
+| STRINGS1          |
+| STUDENTS          |
+| TIME1             |
+| TIMEZONE_TEST     |
++-------------------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS;
++-----+---------+-------+--------+------------+-----------+--------+------+
+| ID  | ROLL_NO | FNAME | LNAME  | DOB        | DEPT_CODE | GENDER | FEES |
++-----+---------+-------+--------+------------+-----------+--------+------+
+| S01 |    1001 | Lalit | Dubey  | 1999-01-06 | CS01      | M      | 5000 |
+| S02 |    1002 | Priya | Kumari | 1998-12-04 | EE01      | F      | 5000 |
++-----+---------+-------+--------+------------+-----------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> INSERT INTO STUDENTS
+    -> (ID,DEPT_CODE)
+    -> VALUES
+    -> ('S01','CS01')
+    -> ON DUPLICATE KEY UPDATE DEPT_CODE='EC01';
+ERROR 1364 (HY000): Field 'FNAME' doesn't have a default value
+mysql> INSERT INTO STUDENTS (ID,FNAME) VALUES ('S01','Lalit') ON DUPLICATE KEY UPDATE FNAME='Lallu';
+Query OK, 2 rows affected (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS;
++-----+---------+-------+--------+------------+-----------+--------+------+
+| ID  | ROLL_NO | FNAME | LNAME  | DOB        | DEPT_CODE | GENDER | FEES |
++-----+---------+-------+--------+------------+-----------+--------+------+
+| S01 |    1001 | Lallu | Dubey  | 1999-01-06 | CS01      | M      | 5000 |
+| S02 |    1002 | Priya | Kumari | 1998-12-04 | EE01      | F      | 5000 |
++-----+---------+-------+--------+------------+-----------+--------+------+
+2 rows in set (0.00 sec)
+
+mysql> ALTER TABLE EE_CLASS_DETAILS 
+    -> ADD  COLUMN EMAIL VARCHAR(50);
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DROP COLUMN EMAIL FROM EE_CLASS_DETAILS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'COLUMN EMAIL FROM EE_CLASS_DETAILS' at line 1
+mysql> ALTER TABLE EE_CLASS_DETAILS DROP  COLUMN EMAIL;
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE EE_CLASS_DETAILS  ADD  COLUMN EMAIL VARCHAR(50) UNIQUE;
+Query OK, 0 rows affected (0.08 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO EE_CLASS_DETAILS VALUES ('1004','Riya','s1@gmail.com');
+Query OK, 1 row affected (0.00 sec)
+
+mysql> UPDATE EE_CLASS_DETAILS
+    -> SET EMAIL='s2@gmai.com'
+    -> where ROLL_NO=1002;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> INSERT IGNORE INTO EE_CLASS_DETAILS VALUES ('1007','Ronald','s1@gmail.com');
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> SHOW WARNINGS;
++---------+------+------------------------------------------------+
+| Level   | Code | Message                                        |
++---------+------+------------------------------------------------+
+| Warning | 1062 | Duplicate entry 's1@gmail.com' for key 'EMAIL' |
++---------+------+------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SHOW * FROM EE_CLASS_DETAILS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '* FROM EE_CLASS_DETAILS' at line 1
+mysql> SELECT * FROM EE_CLASS_DETAILS;
++---------+-------+--------------+
+| ROLL_NO | NAME  | EMAIL        |
++---------+-------+--------------+
+|    1002 | Priya | s2@gmai.com  |
+|    1004 | Riya  | s1@gmail.com |
++---------+-------+--------------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT * FROM ORDERS;
++-----------+---------+
+| SERIAL_ID | SIZE    |
++-----------+---------+
+|         1 | SMALL   |
+|         2 | X-LARGE |
+|         3 | MEDIUM  |
+|         4 | X-SMALL |
+|         3 | MEDIUM  |
+|         3 | MEDIUM  |
++-----------+---------+
+6 rows in set (0.00 sec)
+
+mysql> DELETE FROM ORDERS
+    -> WHERE SERIAL_ID=3;
+Query OK, 3 rows affected (0.00 sec)
+
+mysql> SELECT * FROM ORDERS;
++-----------+---------+
+| SERIAL_ID | SIZE    |
++-----------+---------+
+|         1 | SMALL   |
+|         2 | X-LARGE |
+|         4 | X-SMALL |
++-----------+---------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM BOOKS;
++-----+-----------------+--------+----------------+-------+
+| ID  | TITLE           | NUM_PG | AUTHOR         | PRICE |
++-----+-----------------+--------+----------------+-------+
+| 100 | Homefront       |    245 | Kristin Hannah |  NULL |
+| 101 | Charlotte's Web |    102 | E.B. White     |   299 |
++-----+-----------------+--------+----------------+-------+
+2 rows in set (0.01 sec)
+
+mysql> INSERT INTO TABLE(TITLE,NUM_PG,AUTHOR,PRICE)
+    -> VALUES
+    -> ('It',500,'Stephen King',499),
+    -> ('Dune',250,'Frank Herbert',299),
+    -> ('Macbeth',350,'William Shakespeare',400),
+    -> ('Emma',500,'Jane Austin',199)
+    -> );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TABLE(TITLE,NUM_PG,AUTHOR,PRICE)
+VALUES
+('It',500,'Stephen King',499),
+('Dune',2' at line 1
+mysql> INSERT INTO TABLE BOOKS(TITLE,NUM_PG,AUTHOR,PRICE) VALUES ('It',500,'Stephen King',499), ('Dune',250,'Frank Herbert',299), ('Macbeth',350,'William Shakespeare',400)
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TABLE BOOKS(TITLE,NUM_PG,AUTHOR,PRICE) VALUES ('It',500,'Stephen King',499), ('D' at line 1
+mysql> DESCRIBE BOOKS;
++--------+----------------------+------+-----+---------+----------------+
+| Field  | Type                 | Null | Key | Default | Extra          |
++--------+----------------------+------+-----+---------+----------------+
+| ID     | bigint(20)           | NO   | PRI | NULL    | auto_increment |
+| TITLE  | varchar(100)         | NO   |     | NULL    |                |
+| NUM_PG | smallint(5) unsigned | YES  |     | NULL    |                |
+| AUTHOR | varchar(100)         | YES  |     | NULL    |                |
+| PRICE  | mediumint(9)         | YES  |     | NULL    |                |
++--------+----------------------+------+-----+---------+----------------+
+5 rows in set (0.01 sec)
+
+mysql> INSERT INTO BOOKS(TITLE,NUM_PG,AUTHOR,PRICE) VALUES ('It',500,'Stephen King',499), ('Dune',250,'Frank Herbert',299), ('Macbeth',350,'William Shakespeare',400), ('Emma',500,'Jane Austin',199) );
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> INSERT INTO BOOKS(TITLE,NUM_PG,AUTHOR,PRICE) VALUES ('It',500,'Stephen King',499), ('Dune',250,'Frank Herbert',299), ('Macbeth',350,'William Shakespeare',400), ('Emma',500,'Jane Austin',199) ;
+Query OK, 4 rows affected (0.00 sec)
+Records: 4  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM BOOKS;
++-----+-----------------+--------+---------------------+-------+
+| ID  | TITLE           | NUM_PG | AUTHOR              | PRICE |
++-----+-----------------+--------+---------------------+-------+
+| 100 | Homefront       |    245 | Kristin Hannah      |  NULL |
+| 101 | Charlotte's Web |    102 | E.B. White          |   299 |
+| 102 | It              |    500 | Stephen King        |   499 |
+| 103 | Dune            |    250 | Frank Herbert       |   299 |
+| 104 | Macbeth         |    350 | William Shakespeare |   400 |
+| 105 | Emma            |    500 | Jane Austin         |   199 |
++-----+-----------------+--------+---------------------+-------+
+6 rows in set (0.00 sec)
+
+mysql> UPDATE BOOKS
+    -> SET PRICE=100
+    -> WHERE ID=100;
+Query OK, 1 row affected (0.01 sec)
+Rows matched: 1  Changed: 1  Warnings: 0
+
+mysql> SELECT * FROM BOOKS;
++-----+-----------------+--------+---------------------+-------+
+| ID  | TITLE           | NUM_PG | AUTHOR              | PRICE |
++-----+-----------------+--------+---------------------+-------+
+| 100 | Homefront       |    245 | Kristin Hannah      |   100 |
+| 101 | Charlotte's Web |    102 | E.B. White          |   299 |
+| 102 | It              |    500 | Stephen King        |   499 |
+| 103 | Dune            |    250 | Frank Herbert       |   299 |
+| 104 | Macbeth         |    350 | William Shakespeare |   400 |
+| 105 | Emma            |    500 | Jane Austin         |   199 |
++-----+-----------------+--------+---------------------+-------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT TITLE AS BOOK_NAME
+    -> FROM BOOKS
+    -> WHERE NUM_PG>200 AND PRICE<250;
++-----------+
+| BOOK_NAME |
++-----------+
+| Homefront |
+| Emma      |
++-----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT AUTHOR
+    -> FROM BOOKS
+    -> WHERE AUTHOR LIKE '------n';
+Empty set (0.01 sec)
+
+mysql> SELECT AUTHOR FROM BOOKS WHERE AUTHOR LIKE '______n%';
++----------------+
+| AUTHOR         |
++----------------+
+| Kristin Hannah |
+| Stephen King   |
++----------------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT AUTHOR FROM BOOKS ORDER BY AUTHOR DESC;
++---------------------+
+| AUTHOR              |
++---------------------+
+| William Shakespeare |
+| Stephen King        |
+| Kristin Hannah      |
+| Jane Austin         |
+| Frank Herbert       |
+| E.B. White          |
++---------------------+
+6 rows in set (0.01 sec)
+
+mysql> SELECT TITLE AS BOOK_NAME FROM BOOKS WHERE PRICE BETWEEN 200 AND 250;
+Empty set (0.00 sec)
+
+mysql> SELECT TITLE AS BOOK_NAME FROM BOOKS WHERE PRICE BETWEEN 200 AND 500;
++-----------------+
+| BOOK_NAME       |
++-----------------+
+| Charlotte's Web |
+| It              |
+| Dune            |
+| Macbeth         |
++-----------------+
+4 rows in set (0.01 sec)
+
+mysql> SELECT TITLE AS BOOK_NAME FROM BOOKS WHERE NUM_PG IN (250,350,500);
++-----------+
+| BOOK_NAME |
++-----------+
+| It        |
+| Dune      |
+| Macbeth   |
+| Emma      |
++-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT TITLE, NUM_PG AS BOOK_NAME FROM BOOKS WHERE NUM_PG IN (250,350,500);
++---------+-----------+
+| TITLE   | BOOK_NAME |
++---------+-----------+
+| It      |       500 |
+| Dune    |       250 |
+| Macbeth |       350 |
+| Emma    |       500 |
++---------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT AVG(PRICE) FROM BOOKS;
++------------+
+| AVG(PRICE) |
++------------+
+|   299.3333 |
++------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT COUNT(*) FROM BOOKS GROUP BY PRICE HAVING PRICE<300;
++----------+
+| COUNT(*) |
++----------+
+|        1 |
+|        1 |
+|        2 |
++----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT PRICE,COUNT(*) FROM BOOKS GROUP BY PRICE HAVING PRICE<300;
++-------+----------+
+| PRICE | COUNT(*) |
++-------+----------+
+|   100 |        1 |
+|   199 |        1 |
+|   299 |        2 |
++-------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT MAX(NUM_PG), MIN(NUM_PG) FROM BOOKS;
++-------------+-------------+
+| MAX(NUM_PG) | MIN(NUM_PG) |
++-------------+-------------+
+|         500 |         102 |
++-------------+-------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT TITLE AS BOOK_NAME, NUM_PG FROM BOOKS WHERE NUM_PG IN (250,350,500);
++-----------+--------+
+| BOOK_NAME | NUM_PG |
++-----------+--------+
+| It        |    500 |
+| Dune      |    250 |
+| Macbeth   |    350 |
+| Emma      |    500 |
++-----------+--------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT DISTINCT PRICES FROM BOOKS
+    -> WHERE ID%2!=0;
+ERROR 1054 (42S22): Unknown column 'PRICES' in 'field list'
+mysql> SELECT DISTINCT PRICE FROM BOOKS WHERE ID%2!=0;
++-------+
+| PRICE |
++-------+
+|   299 |
+|   199 |
++-------+
+2 rows in set (0.00 sec)
+
+mysql> /qNSERT IGNORE INTO EE_CLASS_DETAILS VALUES ('1007','Ronald','s1@gmail.com')
