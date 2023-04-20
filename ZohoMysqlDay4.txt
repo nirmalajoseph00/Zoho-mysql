@@ -1,0 +1,385 @@
+Last login: Thu Apr 20 09:31:35 on ttys000
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+nirmala-pt7167:~ nirmala-pt7167$ mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 10
+Server version: 5.7.41 Homebrew
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| NIRMALA            |
+| mysql              |
+| performance_schema |
+| sys                |
+| tutorial           |
++--------------------+
+6 rows in set (0.02 sec)
+
+mysql> CREATE DATABASE STUDENT;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| NIRMALA            |
+| STUDENT            |
+| mysql              |
+| performance_schema |
+| sys                |
+| tutorial           |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> USE STUDENT;
+Database changed
+mysql> CREATE TABLE StudentDetails(
+    -> ID INT NOT NULL AUTO_INCREMENT,
+    -> FirstName VARCHAR(30) NOT NULL,
+    -> LastName VARCHAR(50),
+    -> Gender ENUM('M','F','O') NOT NULL,
+    -> Email VARCHAR(60),
+    -> YearOfBirth DATE,
+mysql> CREATE TABLE StudentDetails( ID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(30) NOT NULL, LastName VARCHAR(50), Gender ENUM('M','F','O') NOT NULL, Email VARCHAR(60), YearOfBirth DATE, PRIMARY KEY(ID);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> CREATE TABLE StudentDetails( ID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(30) NOT NULL, LastName VARCHAR(50), Gender ENUM('M','F','O') NOT NULL, Email VARCHAR(60), YearOfBirth DATE, PRIMARY KEY(ID));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESCRIBE StudentDetails;
++-------------+-------------------+------+-----+---------+----------------+
+| Field       | Type              | Null | Key | Default | Extra          |
++-------------+-------------------+------+-----+---------+----------------+
+| ID          | int(11)           | NO   | PRI | NULL    | auto_increment |
+| FirstName   | varchar(30)       | NO   |     | NULL    |                |
+| LastName    | varchar(50)       | YES  |     | NULL    |                |
+| Gender      | enum('M','F','O') | NO   |     | NULL    |                |
+| Email       | varchar(60)       | YES  |     | NULL    |                |
+| YearOfBirth | date              | YES  |     | NULL    |                |
++-------------+-------------------+------+-----+---------+----------------+
+6 rows in set (0.01 sec)
+
+mysql> #Alter above table add new Column 'Year Of Admission'
+mysql> #Alter above table change Column Name 'Year Of Birth' to 'Date Of Birth'
+mysql> ALTER TABLE STUDENTDETAILS
+    -> ADD COLUMN YearOfAdmission YEAR,
+    -> CHANGE COLUMN YearOfBirth DateOfBirth DATE;
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE StudentDetails;
++-----------------+-------------------+------+-----+---------+----------------+
+| Field           | Type              | Null | Key | Default | Extra          |
++-----------------+-------------------+------+-----+---------+----------------+
+| ID              | int(11)           | NO   | PRI | NULL    | auto_increment |
+| FirstName       | varchar(30)       | NO   |     | NULL    |                |
+| LastName        | varchar(50)       | YES  |     | NULL    |                |
+| Gender          | enum('M','F','O') | NO   |     | NULL    |                |
+| Email           | varchar(60)       | YES  |     | NULL    |                |
+| DateOfBirth     | date              | YES  |     | NULL    |                |
+| YearOfAdmission | year(4)           | YES  |     | NULL    |                |
++-----------------+-------------------+------+-----+---------+----------------+
+7 rows in set (0.00 sec)
+mysql> ALTER TABLE STUDENTDETAILS
+    -> AUTO_INCREMENT=100;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO STUDENTDETAILS(FIRSTNAME,LASTNAME,GENDER,EMAIL,DATEOFBIRTH,YEAROFADMISSION) VALUES 
+    -> ('Zachery','Erlich','M','2000-12-17','2007'),
+    -> ('Susan','McLain','F','2000-02-07','2007'),
+    -> ('Susan','Barlet','F','2001-03-27','2007'),
+    -> ('Joe','McLain','M','1999-06-02','2007'),
+    -> ('Zachery','Erlich','M','2001-01-15','2007'),
+    -> ('Susan','Barlet','F','1999-09-09','2010');
+ERROR 1136 (21S01): Column count doesn't match value count at row 1
+mysql> INSERT INTO STUDENTDETAILS(FIRSTNAME,LASTNAME,GENDER,DATEOFBIRTH,YEAROFADMISSION) VALUES  ('Zachery','Erlich','M','2000-12-17','2007'), ('Susan','McLain','F','2000-02-07','2007'), ('Susan','Barlet','F','2001-03-27','2007'), ('Joe','McLain','M','1999-06-02','2007'), ('Zachery','Erlich','M','2001-01-15','2007'), ('Susan','Barlet','F','1999-09-09','2010');
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENTDETAILS;
++-----+-----------+----------+--------+-------+-------------+-----------------+
+| ID  | FirstName | LastName | Gender | Email | DateOfBirth | YearOfAdmission |
++-----+-----------+----------+--------+-------+-------------+-----------------+
+| 100 | Zachery   | Erlich   | M      | NULL  | 2000-12-17  |            2007 |
+| 101 | Susan     | McLain   | F      | NULL  | 2000-02-07  |            2007 |
+| 102 | Susan     | Barlet   | F      | NULL  | 2001-03-27  |            2007 |
+| 103 | Joe       | McLain   | M      | NULL  | 1999-06-02  |            2007 |
+| 104 | Zachery   | Erlich   | M      | NULL  | 2001-01-15  |            2007 |
+| 105 | Susan     | Barlet   | F      | NULL  | 1999-09-09  |            2010 |
++-----+-----------+----------+--------+-------+-------------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENTDETAILS ADD COLUMN STD SMALLINT AFTER LastName, ADD COLUMN Branch CHAR(2) AFTER STD DEFAULT 'NA';
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DEFAULT 'NA'' at line 1
+mysql> ALTER TABLE STUDENTDETAILS ADD COLUMN STD SMALLINT AFTER LastName, ADD COLUMN Branch CHAR(2)  DEFAULT 'NA' AFTER STD ; 
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENTDETAILS;
++-----+-----------+----------+------+--------+--------+-------+-------------+-----------------+
+| ID  | FirstName | LastName | STD  | Branch | Gender | Email | DateOfBirth | YearOfAdmission |
++-----+-----------+----------+------+--------+--------+-------+-------------+-----------------+
+| 100 | Zachery   | Erlich   | NULL | NA     | M      | NULL  | 2000-12-17  |            2007 |
+| 101 | Susan     | McLain   | NULL | NA     | F      | NULL  | 2000-02-07  |            2007 |
+| 102 | Susan     | Barlet   | NULL | NA     | F      | NULL  | 2001-03-27  |            2007 |
+| 103 | Joe       | McLain   | NULL | NA     | M      | NULL  | 1999-06-02  |            2007 |
+| 104 | Zachery   | Erlich   | NULL | NA     | M      | NULL  | 2001-01-15  |            2007 |
+| 105 | Susan     | Barlet   | NULL | NA     | F      | NULL  | 1999-09-09  |            2010 |
++-----+-----------+----------+------+--------+--------+-------+-------------+-----------------+
+6 rows in set (0.01 sec)
+
+mysql> UPDATE STUDENTDEATILS  SET STD =10 WHERE YEAR(DATEOFBIRTH)= 2000, SET STD =9 WHERE YEAR(DATEOFBIRTH)= 2001, SET STD=11WHERE YEAR(DATEOFBIRTH)= 1999;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ' SET STD =9 WHERE YEAR(DATEOFBIRTH)= 2001, SET STD=11WHERE YEAR(DATEOFBIRTH)= 19' at line 1
+mysql> SELECT YEAR(DATEOFBIRTH)
+    -> FROM STUDENTDETAILS
+    -> ;
++-------------------+
+| YEAR(DATEOFBIRTH) |
++-------------------+
+|              2000 |
+|              2000 |
+|              2001 |
+|              1999 |
+|              2001 |
+|              1999 |
++-------------------+
+6 rows in set (0.00 sec)
+mysql> UPDATE STUDENTDETAILS
+    -> SET YEAR(DATEOFBIRTH)= CASE
+    -> WHEN YEAR(DATEOFBIRTH)= 1999 THEN STD=11
+    -> WHEN YEAR(DATEOFBIRTH)= 2000 THEN STD=10
+    -> WHEN YEAR(DATEOFBIRTH)= 2001 THEN STD=9
+    -> ELSE STD=NULL
+    -> END
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(DATEOFBIRTH)= CASE
+WHEN YEAR(DATEOFBIRTH)= 1999 THEN STD=11
+WHEN YEAR(DATEOFBIR' at line 2
+mysql> UPDATE STUDENTDETAILS
+    -> SET STD= CASE YEAR(DATEOFBIRTH)
+    -> WHEN 1999 THEN 11
+    -> WHEN 2000 THEN 10
+    -> WHEN 2001 THEN 9
+    -> ELSE NULL
+    -> END;
+Query OK, 6 rows affected (0.00 sec)
+Rows matched: 6  Changed: 6  Warnings: 0
+
+mysql> UPDATE STUDENTDETAILS
+    -> SET Branch='A1'
+    -> WHERE STD>10;
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM STUDENTDETAILS;
++-----+-----------+----------+------+--------+--------+-------+-------------+-----------------+
+| ID  | FirstName | LastName | STD  | Branch | Gender | Email | DateOfBirth | YearOfAdmission |
++-----+-----------+----------+------+--------+--------+-------+-------------+-----------------+
+| 100 | Zachery   | Erlich   |   10 | NA     | M      | NULL  | 2000-12-17  |            2007 |
+| 101 | Susan     | McLain   |   10 | NA     | F      | NULL  | 2000-02-07  |            2007 |
+| 102 | Susan     | Barlet   |    9 | NA     | F      | NULL  | 2001-03-27  |            2007 |
+| 103 | Joe       | McLain   |   11 | A1     | M      | NULL  | 1999-06-02  |            2007 |
+| 104 | Zachery   | Erlich   |    9 | NA     | M      | NULL  | 2001-01-15  |            2007 |
+| 105 | Susan     | Barlet   |   11 | A1     | F      | NULL  | 1999-09-09  |            2010 |
++-----+-----------+----------+------+--------+--------+-------+-------------+-----------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT COUNT(*) AS StudentCountBornIn2000 FROM STUDENTDETAILS WHERE YEAR(DATEOFBIRTH)=2000;
++------------------------+
+| StudentCountBornIn2000 |
++------------------------+
+|                      2 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT YEAROFADMISSION, COUNT(*) AS NoOfStudents FROM STUDENTDETAILS GROUP BY YEAROFADMISSION;
++-----------------+--------------+
+| YEAROFADMISSION | NoOfStudents |
++-----------------+--------------+
+|            2007 |            5 |
+|            2010 |            1 |
++-----------------+--------------+
+2 rows in set (0.00 sec)
+
+mysql> #List number of students in each year of admission and also list them based on gender.
+mysql> SELECT YEAROFADMISSION, COUNT(*) AS NoOfStudents,GENDER FROM STUDENTDETAILS GROUP BY YEAROFADMISSION,GENDER;
++-----------------+--------------+--------+
+| YEAROFADMISSION | NoOfStudents | GENDER |
++-----------------+--------------+--------+
+|            2007 |            3 | M      |
+|            2007 |            2 | F      |
+|            2010 |            1 | F      |
++-----------------+--------------+--------+
+3 rows in set (0.03 sec)
+
+mysql> #List number of students with same first name, last name and first and last name
+mysql> SELECT FIRSTNAME,COUNT(*) FROM STUDENTS AS S1,S2 WHERE S1.FIRSTNAME=S2.FIRSTNAME;
+ERROR 1146 (42S02): Table 'student.students' doesn't exist
+mysql> SELECT FIRSTNAME,COUNT(*) FROM STUDENTSDETAILS AS S1,S2 WHERE S1.FIRSTNAME=S2.FIRSTNAME;
+ERROR 1146 (42S02): Table 'student.studentsdetails' doesn't exist
+mysql> SELECT FIRSTNAME,COUNT(*) FROM STUDENTDETAILS AS S1,S2 WHERE S1.FIRSTNAME=S2.FIRSTNAME;
+ERROR 1146 (42S02): Table 'student.s2' doesn't exist
+mysql> SELECT FIRSTNAME,COUNT(*) FROM STUDENTDETAILS AS S1, STUDENTDETAILS AS S2 WHERE S1.FIRSTNAME=S2.FIRSTNAME;
+ERROR 1052 (23000): Column 'FIRSTNAME' in field list is ambiguous
+mysql> SELECT FIRSTNAME,COUNT(*) FROM STUDENTDETAILS GROUP BY FIRSTNAME WHERE COUNT(*)>1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE COUNT(*)>1' at line 1
+mysql> SELECT FIRSTNAME,COUNT(*) FROM STUDENTDETAILS GROUP BY FIRSTNAME HAVING COUNT(*)>1;
++-----------+----------+
+| FIRSTNAME | COUNT(*) |
++-----------+----------+
+| Susan     |        3 |
+| Zachery   |        2 |
++-----------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT LASTNAME,COUNT(*) FROM STUDENTDETAILS GROUP BY LASTNAME HAVING COUNT(*)>1;
++----------+----------+
+| LASTNAME | COUNT(*) |
++----------+----------+
+| Barlet   |        2 |
+| Erlich   |        2 |
+| McLain   |        2 |
++----------+----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,LASTNAME,COUNT(*) AS CountOfSameName FROM STUDENTDETAILS AS S1, STUDENTDETAILS AS S2 
+    -> (S1.FIRSTNAME=S2.FIRSTNAME AND S1.LASTNAME=S2.LASTNAME);                                                              ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(S1.FIRSTNAME=S2.FIRSTNAME AND S1.LASTNAME=S2.LASTNAME)' at line 2
+mysql> SELECT FIRSTNAME,LASTNAME,COUNT(*) AS CountOfSameName FROM STUDENTDETAILS  GROUP BY FIRSTNAME,LASTNAME HAVING COUNT(*)>1;
++-----------+----------+-----------------+
+| FIRSTNAME | LASTNAME | CountOfSameName |
++-----------+----------+-----------------+
+| Susan     | Barlet   |               2 |
+| Zachery   | Erlich   |               2 |
++-----------+----------+-----------------+
+2 rows in set (0.00 sec)
+
+mysql> #Find the year with the maximum and minimum number of students
+mysql> SELECT YEAR
+    -> FROM STUDENTDETAILS
+    -> GROUP BY YEAR
+    -> HAVING max(COUNT(*));
+ERROR 1054 (42S22): Unknown column 'YEAR' in 'field list'
+mysql> SELECT YEAROFADMISSION,COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION HAVING max(COUNT(*));
+ERROR 1111 (HY000): Invalid use of group function
+mysql> WITH A(VALUE) AS (
+    -> SELECT YEAROFADMISSION, COUNT(*)
+    -> FROM STUDENTDETAILS
+    -> GROUPBY YEAROFADMISSION);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'A(VALUE) AS (
+SELECT YEAROFADMISSION, COUNT(*)
+FROM STUDENTDETAILS
+GROUPBY YEARO' at line 1
+mysql> SELECT YEAROFADMISSION,(SELECT MAX(COUNT(*)),FROM STUDENTDEATILS,GROUP BY YEAROFADMISSION) AS STUDENTCOUNT
+    -> FROM STUDENT DETAILS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM STUDENTDEATILS,GROUP BY YEAROFADMISSION) AS STUDENTCOUNT
+FROM STUDENT DETAI' at line 1
+mysql> SELECT MAX(COUNT(*)) FROM STUDENTDEATILS GROUP BY YEAROFADMISSION AS STUDENTCOUNT;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'AS STUDENTCOUNT' at line 1
+mysql> SELECT MAX(COUNT(*)) FROM STUDENTDEATILS GROUP BY YEAROFADMISSION;
+ERROR 1146 (42S02): Table 'student.studentdeatils' doesn't exist
+mysql> SELECT MAX(COUNT(*)) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION;
+ERROR 1111 (HY000): Invalid use of group function
+mysql> SELECT COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION;
++----------+
+| COUNT(*) |
++----------+
+|        5 |
+|        1 |
++----------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT YEAROFADMISSION, COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION ;
++-----------------+----------+
+| YEAROFADMISSION | COUNT(*) |
++-----------------+----------+
+|            2007 |        5 |
+|            2010 |        1 |
++-----------------+----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT YEAROFADMISSION, COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION 
+    -> AND
+    -> SELECT YEAROFADMISSION, MAX(;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELECT YEAROFADMISSION, MAX(' at line 3
+mysql> SELECT YEAROFADMISSION, COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION 
+    -> HAVING COUNT(*) =
+    -> (SELECT COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION ORDER BY COUNT(*)  DESC LIMIT 1));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 3
+mysql> SELECT YEAROFADMISSION, COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION  HAVING COUNT(*) = (SELECT COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION ORDER BY COUNT(*)  DESC LIMIT 1);
++-----------------+----------+
+| YEAROFADMISSION | COUNT(*) |
++-----------------+----------+
+|            2007 |        5 |
++-----------------+----------+
+1 row in set (0.00 sec)
+    -> mysql> 
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'the manual that corresponds to your MySQL server version for the right syntax to' at line 1
+mysql> #Find the year with the maximum and minimum number of students
+mysql> SELECT YEAROFADMISSION, COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION  HAVING COUNT(*) = (SELECT COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION ORDER BY COUNT(*)  DESC LIMIT 1);
++-----------------+----------+
+| YEAROFADMISSION | COUNT(*) |
++-----------------+----------+
+|            2007 |        5 |
++-----------------+----------+
+1 row in set (0.01 sec)
+
+mysql> SELECT YEAROFADMISSION, COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION  HAVING COUNT(*) = (SELECT COUNT(*) FROM STUDENTDETAILS GROUP BY YEAROFADMISSION ORDER BY COUNT(*)  LIMIT 1);
++-----------------+----------+
+| YEAROFADMISSION | COUNT(*) |
++-----------------+----------+
+|            2010 |        1 |
++-----------------+----------+
+1 row in set (0.00 sec)
+
+mysql> SELECT TOP FIRSTNAME,DATEOFBIRTH
+    -> FROM STUDENTDETAILS
+    -> LIMIT 3;
+ERROR 1054 (42S22): Unknown column 'TOP' in 'field list'
+mysql> SELECT TOP 10 FIRSTNAME,DATEOFBIRTH FROM STUDENTDETAILS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '10 FIRSTNAME,DATEOFBIRTH FROM STUDENTDETAILS' at line 1
+mysql> SELECT TOP FIRSTNAME,DATEOFBIRTH FROM STUDENTDETAILS ORDER BY DATEOFBIRTH LIMIT 10;
+ERROR 1054 (42S22): Unknown column 'TOP' in 'field list'
+mysql> SELECT TOP 10 FIRSTNAME,DATEOFBIRTH FROM STUDENTDETAILS ORDER BY DATEOFBIRTH;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '10 FIRSTNAME,DATEOFBIRTH FROM STUDENTDETAILS ORDER BY DATEOFBIRTH' at line 1
+mysql> SELECT TOP 10 * FROM STUDENTDETAILS ORDER BY DATEOFBIRTH;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '10 * FROM STUDENTDETAILS ORDER BY DATEOFBIRTH' at line 1
+mysql> SELECT FIRSTNAME,DATEOFBIRTH FROM STUDENTDETAILS ORDER BY DATEOFBIRTH LIMIT 10;
++-----------+-------------+
+| FIRSTNAME | DATEOFBIRTH |
++-----------+-------------+
+| Joe       | 1999-06-02  |
+| Susan     | 1999-09-09  |
+| Susan     | 2000-02-07  |
+| Zachery   | 2000-12-17  |
+| Zachery   | 2001-01-15  |
+| Susan     | 2001-03-27  |
++-----------+-------------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,DATEOFBIRTH FROM STUDENTDETAILS ORDER BY DATEOFBIRTH LIMIT 3;
++-----------+-------------+
+| FIRSTNAME | DATEOFBIRTH |
++-----------+-------------+
+| Joe       | 1999-06-02  |
+| Susan     | 1999-09-09  |
+| Susan     | 2000-02-07  |
++-----------+-------------+
+3 rows in set (0.00 sec)
+
+mysql> 
