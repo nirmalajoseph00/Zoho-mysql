@@ -1,0 +1,1353 @@
+Last login: Thu Apr 20 09:33:51 on ttys000
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+nirmala-pt7167:~ nirmala-pt7167$ mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 15
+Server version: 5.7.41 Homebrew
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| NIRMALA            |
+| STUDENT            |
+| mysql              |
+| performance_schema |
+| sys                |
+| tutorial           |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> USE NIRMALA;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| BINARY1           |
+| BOOKS             |
+| EE_CLASS_DETAILS  |
+| Employee          |
+| ORDERS            |
+| STRINGS1          |
+| STUDENTS          |
+| TIME1             |
+| TIMEZONE_TEST     |
++-------------------+
+9 rows in set (0.00 sec)
+
+mysql> DESCRIBE EMPLOYEE;
++------------+-------------+------+-----+---------+-------+
+| Field      | Type        | Null | Key | Default | Extra |
++------------+-------------+------+-----+---------+-------+
+| EmployeeId | int(11)     | YES  |     | NULL    |       |
+| LastName   | varchar(50) | YES  |     | NULL    |       |
+| FirstName  | varchar(50) | YES  |     | NULL    |       |
+| Title      | varchar(50) | YES  |     | NULL    |       |
+| ReportsTo  | int(11)     | YES  |     | NULL    |       |
+| BirthDate  | varchar(50) | YES  |     | NULL    |       |
+| HireDate   | varchar(50) | YES  |     | NULL    |       |
+| Address    | varchar(50) | YES  |     | NULL    |       |
+| City       | varchar(50) | YES  |     | NULL    |       |
+| State      | varchar(50) | YES  |     | NULL    |       |
+| Country    | varchar(50) | YES  |     | NULL    |       |
+| PostalCode | varchar(50) | YES  |     | NULL    |       |
+| Phone      | varchar(50) | YES  |     | NULL    |       |
+| Fax        | varchar(50) | YES  |     | NULL    |       |
+| Email      | varchar(50) | YES  |     | NULL    |       |
++------------+-------------+------+-----+---------+-------+
+15 rows in set (0.00 sec)
+
+mysql> CREATE TABLE Users(
+    -> ID BIGINT PRIMARY KEY
+    -> );
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> DESCRIBE USERS
+    -> ;
++-------+------------+------+-----+---------+-------+
+| Field | Type       | Null | Key | Default | Extra |
++-------+------------+------+-----+---------+-------+
+| ID    | bigint(20) | NO   | PRI | NULL    |       |
++-------+------------+------+-----+---------+-------+
+1 row in set (0.00 sec)
+
+mysql> SHOW CREATE TABLE USERS;
++-------+--------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                 |
++-------+--------------------------------------------------------------------------------------------------------------+
+| USERS | CREATE TABLE `USERS` (
+  `ID` bigint(20) NOT NULL,
+  PRIMARY KEY (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 |
++-------+--------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> SHOW INDEXES FROM USERS;
++-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| users |          0 | PRIMARY  |            1 | ID          | A         |           0 |     NULL | NULL   |      | BTREE      |         |               |
++-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+1 row in set (0.01 sec)
+
+mysql> #index is automatically created for primary key
+mysql> #unique index since Non_unique column is set to false(0)
+mysql> drop TABLE USERS;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE TABLE Users( ID BIGINT PRIMARY KEY ,
+    -> NAME VARCHAR(30),
+    -> INDEX(ID));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> SHOW INDEXES FROM USERS;
++-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table | Non_unique | Key_name | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| users |          0 | PRIMARY  |            1 | ID          | A         |           0 |     NULL | NULL   |      | BTREE      |         |               |
+| users |          1 | ID       |            1 | ID          | A         |           0 |     NULL | NULL   |      | BTREE      |         |               |
++-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+2 rows in set (0.01 sec)
+
+mysql> #Duplicate index is created on ID which is not unique bc we didn't declare that
+mysql> ALTER TABLE CUSTOMER ADD INDEX(FIRSTNAME);
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT CUSTOMERID, LASTNAME FROM CUSTOMER WHERE FIRSTNAME='Kara';
++------------+----------+
+| CUSTOMERID | LASTNAME |
++------------+----------+
+|          9 | Nielsen  |
++------------+----------+
+1 row in set (0.00 sec)
+
+mysql> EXPLAIN SELECT CUSTOMERID, LASTNAME FROM CUSTOMER WHERE FIRSTNAME='Kara';
++----+-------------+----------+------------+------+---------------+-----------+---------+-------+------+----------+-------+
+| id | select_type | table    | partitions | type | possible_keys | key       | key_len | ref   | rows | filtered | Extra |
++----+-------------+----------+------------+------+---------------+-----------+---------+-------+------+----------+-------+
+|  1 | SIMPLE      | CUSTOMER | NULL       | ref  | FirstName     | FirstName | 153     | const |    1 |   100.00 | NULL  |
++----+-------------+----------+------------+------+---------------+-----------+---------+-------+------+----------+-------+
+1 row in set, 1 warning (0.01 sec)
+
+mysql> SELECT CUSTOMERID, LASTNAME FROM CUSTOMER WHERE LASTNAME='Harris';
++------------+----------+
+| CUSTOMERID | LASTNAME |
++------------+----------+
+|         16 | Harris   |
++------------+----------+
+1 row in set (0.00 sec)
+
+mysql> EXPLAIN SELECT CUSTOMERID, LASTNAME FROM CUSTOMER WHERE LASTNAME='Harris';
++----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+
+| id | select_type | table    | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
++----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+
+|  1 | SIMPLE      | CUSTOMER | NULL       | ALL  | NULL          | NULL | NULL    | NULL |   59 |    10.00 | Using where |
++----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> #no possible_keys since LASTNAME is not indexed
+mysql> #so searches row by row
+mysql> CREATE TABLE Parent(
+    -> ID BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE Child(ID BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY,                                                         -> PARENT_ID BIGINT UNSIGNED
+    -> ,FOREIGN KEY (PARENT_ID) REFERENCES PARENT(ID));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> SHOW CREATE TABLE CHILD;
++-------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| Table | Create Table                                                                                                                                                                                                                                                                                            |
++-------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+| CHILD | CREATE TABLE `CHILD` (
+  `ID` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `PARENT_ID` bigint(20) unsigned DEFAULT NULL,
+  PRIMARY KEY (`ID`),
+  KEY `PARENT_ID` (`PARENT_ID`),
+  CONSTRAINT `child_ibfk_1` FOREIGN KEY (`PARENT_ID`) REFERENCES `PARENT` (`ID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 |
++-------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+1 row in set (0.00 sec)
+
+mysql> #PARENT_ID is indexed automatically
+mysql> INSERT INTO PARENT(ID) VALUE(1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> INSERT INTO CHILD(PARENT_ID) VALUE(1);
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM CHILD;
++----+-----------+
+| ID | PARENT_ID |
++----+-----------+
+|  1 |         1 |
++----+-----------+
+1 row in set (0.00 sec)
+
+mysql> DELETE FROM PARENT WHERE ID=1;
+ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails (`nirmala`.`child`, CONSTRAINT `child_ibfk_1` FOREIGN KEY (`PARENT_ID`) REFERENCES `PARENT` (`ID`))
+mysql> #foreign key => ON DELETE RESTRICT by default during creation of Child
+mysql> CREATE TABLE Child2(ID BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, PARENT_ID BIGINT UNSIGNED ,FOREIGN KEY (PARENT_ID) REFERENCES PARENT(ID) ON DELETE CASCADE ON UPDATE CASCADE);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO CHILD2(PARENT_ID) VALUE(1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> DROP TABLE CHILD;
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELETE FROM PARENT WHERE ID=1;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM PARENT;
+Empty set (0.00 sec)
+
+mysql> SELECT * FROM CHILD2;
+Empty set (0.00 sec)
+
+mysql> #DELETE CASCADE delete data from multiple related tables
+mysql> 
+mysql> 
+mysql> #JOINS
+mysql> 
+mysql> #CROSS JOIN
+mysql> SELECT E.EMPLOYEEID, E.FIRSTNAME,C.CUSTOMERID,C.FIRSTNAME
+    -> FROM EMPLOYEE AS E CROSS JOIN CUSTOMER AS C;
++------------+-----------+------------+------------+
+| EMPLOYEEID | FIRSTNAME | CUSTOMERID | FIRSTNAME  |
++------------+-----------+------------+------------+
+|          1 | Andrew    |          1 | Luís       |
+|          2 | Nancy     |          1 | Luís       |
+|          3 | Jane      |          1 | Luís       |
+|          4 | Margaret  |          1 | Luís       |
+|          5 | Steve     |          1 | Luís       |
+|          6 | Michael   |          1 | Luís       |
+|          7 | Robert    |          1 | Luís       |
+|          8 | Laura     |          1 | Luís       |
+|          1 | Andrew    |          2 | Leonie     |
+|          2 | Nancy     |          2 | Leonie     |
+|          3 | Jane      |          2 | Leonie     |
+|          4 | Margaret  |          2 | Leonie     |
+|          5 | Steve     |          2 | Leonie     |
+|          6 | Michael   |          2 | Leonie     |
+|          7 | Robert    |          2 | Leonie     |
+|          8 | Laura     |          2 | Leonie     |
+|          1 | Andrew    |          3 | François   |
+|          2 | Nancy     |          3 | François   |
+|          3 | Jane      |          3 | François   |
+|          4 | Margaret  |          3 | François   |
+|          5 | Steve     |          3 | François   |
+|          6 | Michael   |          3 | François   |
+|          7 | Robert    |          3 | François   |
+|          8 | Laura     |          3 | François   |
+|          1 | Andrew    |          4 | Bjørn      |
+|          2 | Nancy     |          4 | Bjørn      |
+|          3 | Jane      |          4 | Bjørn      |
+|          4 | Margaret  |          4 | Bjørn      |
+|          5 | Steve     |          4 | Bjørn      |
+|          6 | Michael   |          4 | Bjørn      |
+|          7 | Robert    |          4 | Bjørn      |
+|          8 | Laura     |          4 | Bjørn      |
+|          1 | Andrew    |          5 | František  |
+|          2 | Nancy     |          5 | František  |
+|          3 | Jane      |          5 | František  |
+|          4 | Margaret  |          5 | František  |
+|          5 | Steve     |          5 | František  |
+|          6 | Michael   |          5 | František  |
+|          7 | Robert    |          5 | František  |
+|          8 | Laura     |          5 | František  |
+|          1 | Andrew    |          6 | Helena     |
+|          2 | Nancy     |          6 | Helena     |
+|          3 | Jane      |          6 | Helena     |
+|          4 | Margaret  |          6 | Helena     |
+|          5 | Steve     |          6 | Helena     |
+|          6 | Michael   |          6 | Helena     |
+|          7 | Robert    |          6 | Helena     |
+|          8 | Laura     |          6 | Helena     |
+|          1 | Andrew    |          7 | Astrid     |
+|          2 | Nancy     |          7 | Astrid     |
+|          3 | Jane      |          7 | Astrid     |
+|          4 | Margaret  |          7 | Astrid     |
+|          5 | Steve     |          7 | Astrid     |
+|          6 | Michael   |          7 | Astrid     |
+|          7 | Robert    |          7 | Astrid     |
+|          8 | Laura     |          7 | Astrid     |
+|          1 | Andrew    |          8 | Daan       |
+|          2 | Nancy     |          8 | Daan       |
+|          3 | Jane      |          8 | Daan       |
+|          4 | Margaret  |          8 | Daan       |
+|          5 | Steve     |          8 | Daan       |
+|          6 | Michael   |          8 | Daan       |
+|          7 | Robert    |          8 | Daan       |
+|          8 | Laura     |          8 | Daan       |
+|          1 | Andrew    |          9 | Kara       |
+|          2 | Nancy     |          9 | Kara       |
+|          3 | Jane      |          9 | Kara       |
+|          4 | Margaret  |          9 | Kara       |
+|          5 | Steve     |          9 | Kara       |
+|          6 | Michael   |          9 | Kara       |
+|          7 | Robert    |          9 | Kara       |
+|          8 | Laura     |          9 | Kara       |
+|          1 | Andrew    |         10 | Eduardo    |
+|          2 | Nancy     |         10 | Eduardo    |
+|          3 | Jane      |         10 | Eduardo    |
+|          4 | Margaret  |         10 | Eduardo    |
+|          5 | Steve     |         10 | Eduardo    |
+|          6 | Michael   |         10 | Eduardo    |
+|          7 | Robert    |         10 | Eduardo    |
+|          8 | Laura     |         10 | Eduardo    |
+|          1 | Andrew    |         11 | Alexandre  |
+|          2 | Nancy     |         11 | Alexandre  |
+|          3 | Jane      |         11 | Alexandre  |
+|          4 | Margaret  |         11 | Alexandre  |
+|          5 | Steve     |         11 | Alexandre  |
+|          6 | Michael   |         11 | Alexandre  |
+|          7 | Robert    |         11 | Alexandre  |
+|          8 | Laura     |         11 | Alexandre  |
+|          1 | Andrew    |         12 | Roberto    |
+|          2 | Nancy     |         12 | Roberto    |
+|          3 | Jane      |         12 | Roberto    |
+|          4 | Margaret  |         12 | Roberto    |
+|          5 | Steve     |         12 | Roberto    |
+|          6 | Michael   |         12 | Roberto    |
+|          7 | Robert    |         12 | Roberto    |
+|          8 | Laura     |         12 | Roberto    |
+|          1 | Andrew    |         13 | Fernanda   |
+|          2 | Nancy     |         13 | Fernanda   |
+|          3 | Jane      |         13 | Fernanda   |
+|          4 | Margaret  |         13 | Fernanda   |
+|          5 | Steve     |         13 | Fernanda   |
+|          6 | Michael   |         13 | Fernanda   |
+|          7 | Robert    |         13 | Fernanda   |
+|          8 | Laura     |         13 | Fernanda   |
+|          1 | Andrew    |         14 | Mark       |
+|          2 | Nancy     |         14 | Mark       |
+|          3 | Jane      |         14 | Mark       |
+|          4 | Margaret  |         14 | Mark       |
+|          5 | Steve     |         14 | Mark       |
+|          6 | Michael   |         14 | Mark       |
+|          7 | Robert    |         14 | Mark       |
+|          8 | Laura     |         14 | Mark       |
+|          1 | Andrew    |         15 | Jennifer   |
+|          2 | Nancy     |         15 | Jennifer   |
+|          3 | Jane      |         15 | Jennifer   |
+|          4 | Margaret  |         15 | Jennifer   |
+|          5 | Steve     |         15 | Jennifer   |
+|          6 | Michael   |         15 | Jennifer   |
+|          7 | Robert    |         15 | Jennifer   |
+|          8 | Laura     |         15 | Jennifer   |
+|          1 | Andrew    |         16 | Frank      |
+|          2 | Nancy     |         16 | Frank      |
+|          3 | Jane      |         16 | Frank      |
+|          4 | Margaret  |         16 | Frank      |
+|          5 | Steve     |         16 | Frank      |
+|          6 | Michael   |         16 | Frank      |
+|          7 | Robert    |         16 | Frank      |
+|          8 | Laura     |         16 | Frank      |
+|          1 | Andrew    |         17 | Jack       |
+|          2 | Nancy     |         17 | Jack       |
+|          3 | Jane      |         17 | Jack       |
+|          4 | Margaret  |         17 | Jack       |
+|          5 | Steve     |         17 | Jack       |
+|          6 | Michael   |         17 | Jack       |
+|          7 | Robert    |         17 | Jack       |
+|          8 | Laura     |         17 | Jack       |
+|          1 | Andrew    |         18 | Michelle   |
+|          2 | Nancy     |         18 | Michelle   |
+|          3 | Jane      |         18 | Michelle   |
+|          4 | Margaret  |         18 | Michelle   |
+|          5 | Steve     |         18 | Michelle   |
+|          6 | Michael   |         18 | Michelle   |
+|          7 | Robert    |         18 | Michelle   |
+|          8 | Laura     |         18 | Michelle   |
+|          1 | Andrew    |         19 | Tim        |
+|          2 | Nancy     |         19 | Tim        |
+|          3 | Jane      |         19 | Tim        |
+|          4 | Margaret  |         19 | Tim        |
+|          5 | Steve     |         19 | Tim        |
+|          6 | Michael   |         19 | Tim        |
+|          7 | Robert    |         19 | Tim        |
+|          8 | Laura     |         19 | Tim        |
+|          1 | Andrew    |         20 | Dan        |
+|          2 | Nancy     |         20 | Dan        |
+|          3 | Jane      |         20 | Dan        |
+|          4 | Margaret  |         20 | Dan        |
+|          5 | Steve     |         20 | Dan        |
+|          6 | Michael   |         20 | Dan        |
+|          7 | Robert    |         20 | Dan        |
+|          8 | Laura     |         20 | Dan        |
+|          1 | Andrew    |         21 | Kathy      |
+|          2 | Nancy     |         21 | Kathy      |
+|          3 | Jane      |         21 | Kathy      |
+|          4 | Margaret  |         21 | Kathy      |
+|          5 | Steve     |         21 | Kathy      |
+|          6 | Michael   |         21 | Kathy      |
+|          7 | Robert    |         21 | Kathy      |
+|          8 | Laura     |         21 | Kathy      |
+|          1 | Andrew    |         22 | Heather    |
+|          2 | Nancy     |         22 | Heather    |
+|          3 | Jane      |         22 | Heather    |
+|          4 | Margaret  |         22 | Heather    |
+|          5 | Steve     |         22 | Heather    |
+|          6 | Michael   |         22 | Heather    |
+|          7 | Robert    |         22 | Heather    |
+|          8 | Laura     |         22 | Heather    |
+|          1 | Andrew    |         23 | John       |
+|          2 | Nancy     |         23 | John       |
+|          3 | Jane      |         23 | John       |
+|          4 | Margaret  |         23 | John       |
+|          5 | Steve     |         23 | John       |
+|          6 | Michael   |         23 | John       |
+|          7 | Robert    |         23 | John       |
+|          8 | Laura     |         23 | John       |
+|          1 | Andrew    |         24 | Frank      |
+|          2 | Nancy     |         24 | Frank      |
+|          3 | Jane      |         24 | Frank      |
+|          4 | Margaret  |         24 | Frank      |
+|          5 | Steve     |         24 | Frank      |
+|          6 | Michael   |         24 | Frank      |
+|          7 | Robert    |         24 | Frank      |
+|          8 | Laura     |         24 | Frank      |
+|          1 | Andrew    |         25 | Victor     |
+|          2 | Nancy     |         25 | Victor     |
+|          3 | Jane      |         25 | Victor     |
+|          4 | Margaret  |         25 | Victor     |
+|          5 | Steve     |         25 | Victor     |
+|          6 | Michael   |         25 | Victor     |
+|          7 | Robert    |         25 | Victor     |
+|          8 | Laura     |         25 | Victor     |
+|          1 | Andrew    |         26 | Richard    |
+|          2 | Nancy     |         26 | Richard    |
+|          3 | Jane      |         26 | Richard    |
+|          4 | Margaret  |         26 | Richard    |
+|          5 | Steve     |         26 | Richard    |
+|          6 | Michael   |         26 | Richard    |
+|          7 | Robert    |         26 | Richard    |
+|          8 | Laura     |         26 | Richard    |
+|          1 | Andrew    |         27 | Patrick    |
+|          2 | Nancy     |         27 | Patrick    |
+|          3 | Jane      |         27 | Patrick    |
+|          4 | Margaret  |         27 | Patrick    |
+|          5 | Steve     |         27 | Patrick    |
+|          6 | Michael   |         27 | Patrick    |
+|          7 | Robert    |         27 | Patrick    |
+|          8 | Laura     |         27 | Patrick    |
+|          1 | Andrew    |         28 | Julia      |
+|          2 | Nancy     |         28 | Julia      |
+|          3 | Jane      |         28 | Julia      |
+|          4 | Margaret  |         28 | Julia      |
+|          5 | Steve     |         28 | Julia      |
+|          6 | Michael   |         28 | Julia      |
+|          7 | Robert    |         28 | Julia      |
+|          8 | Laura     |         28 | Julia      |
+|          1 | Andrew    |         29 | Robert     |
+|          2 | Nancy     |         29 | Robert     |
+|          3 | Jane      |         29 | Robert     |
+|          4 | Margaret  |         29 | Robert     |
+|          5 | Steve     |         29 | Robert     |
+|          6 | Michael   |         29 | Robert     |
+|          7 | Robert    |         29 | Robert     |
+|          8 | Laura     |         29 | Robert     |
+|          1 | Andrew    |         30 | Edward     |
+|          2 | Nancy     |         30 | Edward     |
+|          3 | Jane      |         30 | Edward     |
+|          4 | Margaret  |         30 | Edward     |
+|          5 | Steve     |         30 | Edward     |
+|          6 | Michael   |         30 | Edward     |
+|          7 | Robert    |         30 | Edward     |
+|          8 | Laura     |         30 | Edward     |
+|          1 | Andrew    |         31 | Martha     |
+|          2 | Nancy     |         31 | Martha     |
+|          3 | Jane      |         31 | Martha     |
+|          4 | Margaret  |         31 | Martha     |
+|          5 | Steve     |         31 | Martha     |
+|          6 | Michael   |         31 | Martha     |
+|          7 | Robert    |         31 | Martha     |
+|          8 | Laura     |         31 | Martha     |
+|          1 | Andrew    |         32 | Aaron      |
+|          2 | Nancy     |         32 | Aaron      |
+|          3 | Jane      |         32 | Aaron      |
+|          4 | Margaret  |         32 | Aaron      |
+|          5 | Steve     |         32 | Aaron      |
+|          6 | Michael   |         32 | Aaron      |
+|          7 | Robert    |         32 | Aaron      |
+|          8 | Laura     |         32 | Aaron      |
+|          1 | Andrew    |         33 | Ellie      |
+|          2 | Nancy     |         33 | Ellie      |
+|          3 | Jane      |         33 | Ellie      |
+|          4 | Margaret  |         33 | Ellie      |
+|          5 | Steve     |         33 | Ellie      |
+|          6 | Michael   |         33 | Ellie      |
+|          7 | Robert    |         33 | Ellie      |
+|          8 | Laura     |         33 | Ellie      |
+|          1 | Andrew    |         34 | João       |
+|          2 | Nancy     |         34 | João       |
+|          3 | Jane      |         34 | João       |
+|          4 | Margaret  |         34 | João       |
+|          5 | Steve     |         34 | João       |
+|          6 | Michael   |         34 | João       |
+|          7 | Robert    |         34 | João       |
+|          8 | Laura     |         34 | João       |
+|          1 | Andrew    |         35 | Madalena   |
+|          2 | Nancy     |         35 | Madalena   |
+|          3 | Jane      |         35 | Madalena   |
+|          4 | Margaret  |         35 | Madalena   |
+|          5 | Steve     |         35 | Madalena   |
+|          6 | Michael   |         35 | Madalena   |
+|          7 | Robert    |         35 | Madalena   |
+|          8 | Laura     |         35 | Madalena   |
+|          1 | Andrew    |         36 | Hannah     |
+|          2 | Nancy     |         36 | Hannah     |
+|          3 | Jane      |         36 | Hannah     |
+|          4 | Margaret  |         36 | Hannah     |
+|          5 | Steve     |         36 | Hannah     |
+|          6 | Michael   |         36 | Hannah     |
+|          7 | Robert    |         36 | Hannah     |
+|          8 | Laura     |         36 | Hannah     |
+|          1 | Andrew    |         37 | Fynn       |
+|          2 | Nancy     |         37 | Fynn       |
+|          3 | Jane      |         37 | Fynn       |
+|          4 | Margaret  |         37 | Fynn       |
+|          5 | Steve     |         37 | Fynn       |
+|          6 | Michael   |         37 | Fynn       |
+|          7 | Robert    |         37 | Fynn       |
+|          8 | Laura     |         37 | Fynn       |
+|          1 | Andrew    |         38 | Niklas     |
+|          2 | Nancy     |         38 | Niklas     |
+|          3 | Jane      |         38 | Niklas     |
+|          4 | Margaret  |         38 | Niklas     |
+|          5 | Steve     |         38 | Niklas     |
+|          6 | Michael   |         38 | Niklas     |
+|          7 | Robert    |         38 | Niklas     |
+|          8 | Laura     |         38 | Niklas     |
+|          1 | Andrew    |         39 | Camille    |
+|          2 | Nancy     |         39 | Camille    |
+|          3 | Jane      |         39 | Camille    |
+|          4 | Margaret  |         39 | Camille    |
+|          5 | Steve     |         39 | Camille    |
+|          6 | Michael   |         39 | Camille    |
+|          7 | Robert    |         39 | Camille    |
+|          8 | Laura     |         39 | Camille    |
+|          1 | Andrew    |         40 | Dominique  |
+|          2 | Nancy     |         40 | Dominique  |
+|          3 | Jane      |         40 | Dominique  |
+|          4 | Margaret  |         40 | Dominique  |
+|          5 | Steve     |         40 | Dominique  |
+|          6 | Michael   |         40 | Dominique  |
+|          7 | Robert    |         40 | Dominique  |
+|          8 | Laura     |         40 | Dominique  |
+|          1 | Andrew    |         41 | Marc       |
+|          2 | Nancy     |         41 | Marc       |
+|          3 | Jane      |         41 | Marc       |
+|          4 | Margaret  |         41 | Marc       |
+|          5 | Steve     |         41 | Marc       |
+|          6 | Michael   |         41 | Marc       |
+|          7 | Robert    |         41 | Marc       |
+|          8 | Laura     |         41 | Marc       |
+|          1 | Andrew    |         42 | Wyatt      |
+|          2 | Nancy     |         42 | Wyatt      |
+|          3 | Jane      |         42 | Wyatt      |
+|          4 | Margaret  |         42 | Wyatt      |
+|          5 | Steve     |         42 | Wyatt      |
+|          6 | Michael   |         42 | Wyatt      |
+|          7 | Robert    |         42 | Wyatt      |
+|          8 | Laura     |         42 | Wyatt      |
+|          1 | Andrew    |         43 | Isabelle   |
+|          2 | Nancy     |         43 | Isabelle   |
+|          3 | Jane      |         43 | Isabelle   |
+|          4 | Margaret  |         43 | Isabelle   |
+|          5 | Steve     |         43 | Isabelle   |
+|          6 | Michael   |         43 | Isabelle   |
+|          7 | Robert    |         43 | Isabelle   |
+|          8 | Laura     |         43 | Isabelle   |
+|          1 | Andrew    |         44 | Terhi      |
+|          2 | Nancy     |         44 | Terhi      |
+|          3 | Jane      |         44 | Terhi      |
+|          4 | Margaret  |         44 | Terhi      |
+|          5 | Steve     |         44 | Terhi      |
+|          6 | Michael   |         44 | Terhi      |
+|          7 | Robert    |         44 | Terhi      |
+|          8 | Laura     |         44 | Terhi      |
+|          1 | Andrew    |         45 | Ladislav   |
+|          2 | Nancy     |         45 | Ladislav   |
+|          3 | Jane      |         45 | Ladislav   |
+|          4 | Margaret  |         45 | Ladislav   |
+|          5 | Steve     |         45 | Ladislav   |
+|          6 | Michael   |         45 | Ladislav   |
+|          7 | Robert    |         45 | Ladislav   |
+|          8 | Laura     |         45 | Ladislav   |
+|          1 | Andrew    |         46 | Hugh       |
+|          2 | Nancy     |         46 | Hugh       |
+|          3 | Jane      |         46 | Hugh       |
+|          4 | Margaret  |         46 | Hugh       |
+|          5 | Steve     |         46 | Hugh       |
+|          6 | Michael   |         46 | Hugh       |
+|          7 | Robert    |         46 | Hugh       |
+|          8 | Laura     |         46 | Hugh       |
+|          1 | Andrew    |         47 | Lucas      |
+|          2 | Nancy     |         47 | Lucas      |
+|          3 | Jane      |         47 | Lucas      |
+|          4 | Margaret  |         47 | Lucas      |
+|          5 | Steve     |         47 | Lucas      |
+|          6 | Michael   |         47 | Lucas      |
+|          7 | Robert    |         47 | Lucas      |
+|          8 | Laura     |         47 | Lucas      |
+|          1 | Andrew    |         48 | Johannes   |
+|          2 | Nancy     |         48 | Johannes   |
+|          3 | Jane      |         48 | Johannes   |
+|          4 | Margaret  |         48 | Johannes   |
+|          5 | Steve     |         48 | Johannes   |
+|          6 | Michael   |         48 | Johannes   |
+|          7 | Robert    |         48 | Johannes   |
+|          8 | Laura     |         48 | Johannes   |
+|          1 | Andrew    |         49 | Stanisław  |
+|          2 | Nancy     |         49 | Stanisław  |
+|          3 | Jane      |         49 | Stanisław  |
+|          4 | Margaret  |         49 | Stanisław  |
+|          5 | Steve     |         49 | Stanisław  |
+|          6 | Michael   |         49 | Stanisław  |
+|          7 | Robert    |         49 | Stanisław  |
+|          8 | Laura     |         49 | Stanisław  |
+|          1 | Andrew    |         50 | Enrique    |
+|          2 | Nancy     |         50 | Enrique    |
+|          3 | Jane      |         50 | Enrique    |
+|          4 | Margaret  |         50 | Enrique    |
+|          5 | Steve     |         50 | Enrique    |
+|          6 | Michael   |         50 | Enrique    |
+|          7 | Robert    |         50 | Enrique    |
+|          8 | Laura     |         50 | Enrique    |
+|          1 | Andrew    |         51 | Joakim     |
+|          2 | Nancy     |         51 | Joakim     |
+|          3 | Jane      |         51 | Joakim     |
+|          4 | Margaret  |         51 | Joakim     |
+|          5 | Steve     |         51 | Joakim     |
+|          6 | Michael   |         51 | Joakim     |
+|          7 | Robert    |         51 | Joakim     |
+|          8 | Laura     |         51 | Joakim     |
+|          1 | Andrew    |         52 | Emma       |
+|          2 | Nancy     |         52 | Emma       |
+|          3 | Jane      |         52 | Emma       |
+|          4 | Margaret  |         52 | Emma       |
+|          5 | Steve     |         52 | Emma       |
+|          6 | Michael   |         52 | Emma       |
+|          7 | Robert    |         52 | Emma       |
+|          8 | Laura     |         52 | Emma       |
+|          1 | Andrew    |         53 | Phil       |
+|          2 | Nancy     |         53 | Phil       |
+|          3 | Jane      |         53 | Phil       |
+|          4 | Margaret  |         53 | Phil       |
+|          5 | Steve     |         53 | Phil       |
+|          6 | Michael   |         53 | Phil       |
+|          7 | Robert    |         53 | Phil       |
+|          8 | Laura     |         53 | Phil       |
+|          1 | Andrew    |         54 | Steve      |
+|          2 | Nancy     |         54 | Steve      |
+|          3 | Jane      |         54 | Steve      |
+|          4 | Margaret  |         54 | Steve      |
+|          5 | Steve     |         54 | Steve      |
+|          6 | Michael   |         54 | Steve      |
+|          7 | Robert    |         54 | Steve      |
+|          8 | Laura     |         54 | Steve      |
+|          1 | Andrew    |         55 | Mark       |
+|          2 | Nancy     |         55 | Mark       |
+|          3 | Jane      |         55 | Mark       |
+|          4 | Margaret  |         55 | Mark       |
+|          5 | Steve     |         55 | Mark       |
+|          6 | Michael   |         55 | Mark       |
+|          7 | Robert    |         55 | Mark       |
+|          8 | Laura     |         55 | Mark       |
+|          1 | Andrew    |         56 | Diego      |
+|          2 | Nancy     |         56 | Diego      |
+|          3 | Jane      |         56 | Diego      |
+|          4 | Margaret  |         56 | Diego      |
+|          5 | Steve     |         56 | Diego      |
+|          6 | Michael   |         56 | Diego      |
+|          7 | Robert    |         56 | Diego      |
+|          8 | Laura     |         56 | Diego      |
+|          1 | Andrew    |         57 | Luis       |
+|          2 | Nancy     |         57 | Luis       |
+|          3 | Jane      |         57 | Luis       |
+|          4 | Margaret  |         57 | Luis       |
+|          5 | Steve     |         57 | Luis       |
+|          6 | Michael   |         57 | Luis       |
+|          7 | Robert    |         57 | Luis       |
+|          8 | Laura     |         57 | Luis       |
+|          1 | Andrew    |         58 | Manoj      |
+|          2 | Nancy     |         58 | Manoj      |
+|          3 | Jane      |         58 | Manoj      |
+|          4 | Margaret  |         58 | Manoj      |
+|          5 | Steve     |         58 | Manoj      |
+|          6 | Michael   |         58 | Manoj      |
+|          7 | Robert    |         58 | Manoj      |
+|          8 | Laura     |         58 | Manoj      |
+|          1 | Andrew    |         59 | Puja       |
+|          2 | Nancy     |         59 | Puja       |
+|          3 | Jane      |         59 | Puja       |
+|          4 | Margaret  |         59 | Puja       |
+|          5 | Steve     |         59 | Puja       |
+|          6 | Michael   |         59 | Puja       |
+|          7 | Robert    |         59 | Puja       |
+|          8 | Laura     |         59 | Puja       |
++------------+-----------+------------+------------+
+472 rows in set (0.00 sec)
+
+mysql> #gives cartesian product of rows from tables
+mysql> 
+mysql> #INNER JOIN
+mysql> SELECT * FROM COURSE;
++-----------+---------------+------------+---------+
+| COURSE_ID | TITLE         | DEPT_NAME  | CREDITS |
++-----------+---------------+------------+---------+
+| BIO-101   | Basic Biology | Biology    |       4 |
+| BIO-301   | Genetics      | Biology    |       4 |
+| CS-101    | Basic Prgm    | Comp. Sci. |       3 |
+| CS-190    | Game Design   | Comp. Sci. |       4 |
+| CS-315    | Robotocs      | Comp. Sci. |       3 |
++-----------+---------------+------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM PREREQ;
++-----------+-----------+
+| COURSE_ID | PREREQ_ID |
++-----------+-----------+
+| BIO-301   | BIO-101   |
+| CS-190    | CS-101    |
+| CS-347    | CS-101    |
++-----------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM COURSE INNER JOIN PREREQ  WHERE COURSE.COURSE_ID=PREREQ.COURSE_ID;
++-----------+-------------+------------+---------+-----------+-----------+
+| COURSE_ID | TITLE       | DEPT_NAME  | CREDITS | COURSE_ID | PREREQ_ID |
++-----------+-------------+------------+---------+-----------+-----------+
+| BIO-301   | Genetics    | Biology    |       4 | BIO-301   | BIO-101   |
+| CS-190    | Game Design | Comp. Sci. |       4 | CS-190    | CS-101    |
++-----------+-------------+------------+---------+-----------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM COURSE NATURAL JOIN PREREQ  WHERE COURSE.COURSE_ID=PREREQ.COURSE_ID;
++-----------+-------------+------------+---------+-----------+
+| COURSE_ID | TITLE       | DEPT_NAME  | CREDITS | PREREQ_ID |
++-----------+-------------+------------+---------+-----------+
+| BIO-301   | Genetics    | Biology    |       4 | BIO-101   |
+| CS-190    | Game Design | Comp. Sci. |       4 | CS-101    |
++-----------+-------------+------------+---------+-----------+
+2 rows in set (0.01 sec)
+
+mysql> #2nd course_id omitted on using NATURAL
+mysql> 
+mysql> SELECT * FROM COURSE NATURAL LEFT OUTER JOIN PREREQ  WHERE COURSE.COURSE_ID=PREREQ.COURSE_ID;
++-----------+-------------+------------+---------+-----------+
+| COURSE_ID | TITLE       | DEPT_NAME  | CREDITS | PREREQ_ID |
++-----------+-------------+------------+---------+-----------+
+| BIO-301   | Genetics    | Biology    |       4 | BIO-101   |
+| CS-190    | Game Design | Comp. Sci. |       4 | CS-101    |
++-----------+-------------+------------+---------+-----------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT * FROM COURSE NATURAL LEFT OUTER JOIN PREREQ;
++-----------+---------------+------------+---------+-----------+
+| COURSE_ID | TITLE         | DEPT_NAME  | CREDITS | PREREQ_ID |
++-----------+---------------+------------+---------+-----------+
+| BIO-301   | Genetics      | Biology    |       4 | BIO-101   |
+| CS-190    | Game Design   | Comp. Sci. |       4 | CS-101    |
+| BIO-101   | Basic Biology | Biology    |       4 | NULL      |
+| CS-101    | Basic Prgm    | Comp. Sci. |       3 | NULL      |
+| CS-315    | Robotocs      | Comp. Sci. |       3 | NULL      |
++-----------+---------------+------------+---------+-----------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM COURSE NATURAL RIGHT OUTER JOIN PREREQ;
++-----------+-----------+-------------+------------+---------+
+| COURSE_ID | PREREQ_ID | TITLE       | DEPT_NAME  | CREDITS |
++-----------+-----------+-------------+------------+---------+
+| BIO-301   | BIO-101   | Genetics    | Biology    |       4 |
+| CS-190    | CS-101    | Game Design | Comp. Sci. |       4 |
+| CS-347    | CS-101    | NULL        | NULL       |    NULL |
++-----------+-----------+-------------+------------+---------+
+3 rows in set (0.01 sec)
+
+mysql> SELECT * FROM COURSE NATURAL RIGHT OUTER JOIN PREREQ
+    -> ON COURSE.COURSE_ID = PREREQ.COURSE_ID;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ON COURSE.COURSE_ID = PREREQ.COURSE_ID' at line 2
+mysql> SELECT * FROM COURSE NATURAL RIGHT OUTER JOIN PREREQ  WHERE COURSE.COURSE_ID=PREREQ.COURSE_ID;
++-----------+-----------+-------------+------------+---------+
+| COURSE_ID | PREREQ_ID | TITLE       | DEPT_NAME  | CREDITS |
++-----------+-----------+-------------+------------+---------+
+| BIO-301   | BIO-101   | Genetics    | Biology    |       4 |
+| CS-190    | CS-101    | Game Design | Comp. Sci. |       4 |
++-----------+-----------+-------------+------------+---------+
+2 rows in set (0.00 sec)
+mysql> 
+mysql> 
+mysql> SELECT * FROM EMPLOYEE2;
++------------+----------+-----------+
+| EmployeeId | LastName | FirstName |
++------------+----------+-----------+
+|          1 | Adams    | Andrew    |
+|          2 | Edwards  | Nancy     |
+|          3 | Peacock  | Jane      |
+|         11 | Roberts  | June      |
++------------+----------+-----------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM COURSE;
++-----------+---------------+------------+---------+
+| COURSE_ID | TITLE         | DEPT_NAME  | CREDITS |
++-----------+---------------+------------+---------+
+| BIO-301   | Genetics      | Biology    |       4 |
+| CS-190    | Game Design   | Comp. Sci. |       4 |
+| CS-315    | Robotocs      | Comp. Sci. |       3 |
+| CS-101    | Basic Prgm    | Comp. Sci. |       3 |
+| BIO-101   | Basic Biology | Biology    |       4 |
+| CS-101    | Basic Prgm    | Data Sci.  |       4 |
++-----------+---------------+------------+---------+
+6 rows in set (0.00 sec)
+
+mysql> CREATE NEW TABLE COURSE_CREDITS(
+    -> COURSE_ID VARCHAR(10),
+    -> CREDITS SMALLINT);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'NEW TABLE COURSE_CREDITS(
+COURSE_ID VARCHAR(10),
+CREDITS SMALLINT)' at line 1
+mysql> CREATE TABLE COURSE_CREDITS( COURSE_ID VARCHAR(10), CREDITS SMALLINT);
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO COURSE_CREDITS(COURSE_ID,CREDITS)
+    -> FROM COURSE;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM COURSE' at line 2
+mysql> INSERT INTO COURSE_CREDITS(COURSE_ID,CREDITS) 
+    -> SELECT COURSE_ID, CREDITS
+    -> FROM COURSE;
+Query OK, 6 rows affected (0.01 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> UPDATE COURSE_CREDITS SET CREDITS=3 WHERE COURSE_ID='CS-101';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 2  Changed: 1  Warnings: 0
+
+mysql> SELECT DISTINCT * FROM COURSE_CREDITS;
++-----------+---------+
+| COURSE_ID | CREDITS |
++-----------+---------+
+| BIO-301   |       4 |
+| CS-190    |       4 |
+| CS-315    |       3 |
+| CS-101    |       3 |
+| BIO-101   |       4 |
++-----------+---------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT COURSE_ID,TITLE,DEPT_NAME
+    -> F;
+ERROR 1054 (42S22): Unknown column 'COURSE_ID' in 'field list'
+mysql> CREATE TABLE COURSE_CREDITS( COURSE_ID VARCHAR(10), TITLE VARCHAR(30),);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ')' at line 1
+mysql> CREATE TABLE COURSE_CREDITS( COURSE_ID VARCHAR(10), TITLE VARCHAR(30),DEPT_NAME VARCHAR(30));
+ERROR 1050 (42S01): Table 'course_credits' already exists
+mysql> CREATE TABLE COURSE_DETAILS( COURSE_ID VARCHAR(10), TITLE VARCHAR(30),DEPT_NAME VARCHAR(30));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO COURSE_DETAILS(COURSE_ID,TITLE,DEPT_NAME)  SELECT COURSE_ID,TITLE,DEPT_NAME FROM COURSE;
+Query OK, 6 rows affected (0.00 sec)
+Records: 6  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM COURSE_DETAILS;
++-----------+---------------+------------+
+| COURSE_ID | TITLE         | DEPT_NAME  |
++-----------+---------------+------------+
+| BIO-301   | Genetics      | Biology    |
+| CS-190    | Game Design   | Comp. Sci. |
+| CS-315    | Robotocs      | Comp. Sci. |
+| CS-101    | Basic Prgm    | Comp. Sci. |
+| BIO-101   | Basic Biology | Biology    |
+| CS-101    | Basic Prgm    | Data Sci.  |
++-----------+---------------+------------+
+6 rows in set (0.00 sec)
+
+mysql> #2NF form
+mysql> 
+mysql> 
+mysql> 
+mysql> SELECT * FROM COURSE_DETAILS;
++-----------+---------------+------------+-----------+--------------+
+| COURSE_ID | TITLE         | DEPT_NAME  | COURSE_YR | COURSE_LEVEL |
++-----------+---------------+------------+-----------+--------------+
+| BIO-301   | Genetics      | Biology    |         3 | DEGREE       |
+| CS-190    | Game Design   | Comp. Sci. |         1 | FOUNDATION   |
+| CS-315    | Robotocs      | Comp. Sci. |         3 | DEGREE       |
+| CS-101    | Basic Prgm    | Comp. Sci. |         1 | FOUNDATION   |
+| BIO-101   | Basic Biology | Biology    |         2 | FOUNDATION   |
+| CS-101    | Basic Prgm    | Data Sci.  |         1 | FOUNDATION   |
+| BIO-201   | CNS           | Biology    |         2 | DIPLOMA      |
++-----------+---------------+------------+-----------+--------------+
+7 rows in set (0.01 sec)
+
+mysql> #course_LEVEL shud be dependent on course_YR but it is not for bio-101
+mysql> CREATE TABLE YR_LEVEL(COURSE_YR SMALL INT,COURSE_LEVEL VARCHAR(30));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SMALL INT,COURSE_LEVEL VARCHAR(30))' at line 1
+mysql> CREATE TABLE YR_LEVEL(COURSE_YR SMALLINT,COURSE_LEVEL VARCHAR(30));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> UPDATE COURSE_DETAILS
+    -> SET COURSE_YR=1
+    -> WHERE COURSE_LEVEL='FOUNDATION';
+Query OK, 1 row affected (0.00 sec)
+Rows matched: 4  Changed: 1  Warnings: 0
+
+mysql> INSERT INTO YR_LEVEL SELECT DISTINCT COURSE_YR,COURSE_LEVEL FROM COURSE_DETAILS;
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM YR_LEVEL;
++-----------+--------------+
+| COURSE_YR | COURSE_LEVEL |
++-----------+--------------+
+|         3 | DEGREE       |
+|         1 | FOUNDATION   |
+|         2 | DIPLOMA      |
++-----------+--------------+
+3 rows in set (0.00 sec)
+
+mysql> ALTER TABLE COURSE_DETAILS
+    -> DROP COLUMN COURSE_LEVEL;
+Query OK, 0 rows affected (0.11 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM COURSE_DETAILS;
++-----------+---------------+------------+-----------+
+| COURSE_ID | TITLE         | DEPT_NAME  | COURSE_YR |
++-----------+---------------+------------+-----------+
+| BIO-301   | Genetics      | Biology    |         3 |
+| CS-190    | Game Design   | Comp. Sci. |         1 |
+| CS-315    | Robotocs      | Comp. Sci. |         3 |
+| CS-101    | Basic Prgm    | Comp. Sci. |         1 |
+| BIO-101   | Basic Biology | Biology    |         1 |
+| CS-101    | Basic Prgm    | Data Sci.  |         1 |
+| BIO-201   | CNS           | Biology    |         2 |
++-----------+---------------+------------+-----------+
+7 rows in set (0.01 sec)
+
+mysql> #3NF Form
+mysql> 
+mysql> 
+mysql> 
+mysql> SELECT * FROM STUDENT_LIST;
++----+---------------+---------+
+| ID | COURSE        | HOBBY   |
++----+---------------+---------+
+|  1 | Game Design   | Singing |
+|  1 | GENETICS      | Dancing |
+|  2 | Basic Prgm    | Hockey  |
+|  2 | Robotics      | Cricket |
+|  3 | Basic Biology | Tennis  |
++----+---------------+---------+
+5 rows in set (0.00 sec)
+
+mysql> #course and hobby are independent i.e no relationship between them
+mysql> 
+mysql> CREATE TABLE STUDENT_COURSE(ID INT, COURSE VARCHAR(30));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE STUDENT_HOBBY(ID INT, HOBBY VARCHAR(30));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> INSERT INTO STUDENT_COURSE
+    -> SELECT ID,COURSE
+    -> FROM STUDENT_LIST;
+Query OK, 5 rows affected (0.00 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENT_COURSE;
++------+---------------+
+| ID   | COURSE        |
++------+---------------+
+|    1 | Game Design   |
+|    1 | GENETICS      |
+|    2 | Basic Prgm    |
+|    2 | Robotics      |
+|    3 | Basic Biology |
++------+---------------+
+5 rows in set (0.00 sec)
+
+mysql> INSERT INTO STUDENT_HOBBY SELECT ID,HOBBY FROM STUDENT_LIST;
+Query OK, 5 rows affected (0.01 sec)
+Records: 5  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENT_HOBBY;
++------+---------+
+| ID   | HOBBY   |
++------+---------+
+|    1 | Singing |
+|    1 | Dancing |
+|    2 | Hockey  |
+|    2 | Cricket |
+|    3 | Tennis  |
++------+---------+
+5 rows in set (0.00 sec)
+
+mysql> #4NF form
+mysql> 
+mysql> 
+mysql> 
+mysql> #prefic index
+mysql> 
+mysql> SELECT EMPLOYEEID, LASTNAME, FIRSTNAME FROM EMPLOYEE;
++------------+----------+-----------+
+| EMPLOYEEID | LASTNAME | FIRSTNAME |
++------------+----------+-----------+
+|          1 | Adams    | Andrew    |
+|          2 | Edwards  | Nancy     |
+|          3 | Peacock  | Jane      |
+|          4 | Park     | Margaret  |
+|          5 | Johnson  | Steve     |
+|          6 | Mitchell | Michael   |
+|          7 | King     | Robert    |
+|          8 | Callahan | Laura     |
++------------+----------+-----------+
+8 rows in set (0.01 sec)
+
+mysql> ALTER TABLE EMPLOYEE ADD INDEX(FIRSTNAME(3));
+Query OK, 0 rows affected (0.02 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SHOW INDEXES FROM EMPLOYEE;
++----------+------------+-----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table    | Non_unique | Key_name  | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++----------+------------+-----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| employee |          0 | PRIMARY   |            1 | EmployeeId  | A         |           8 |     NULL | NULL   |      | BTREE      |         |               |
+| employee |          1 | FirstName |            1 | FirstName   | A         |           8 |        3 | NULL   | YES  | BTREE      |         |               |
++----------+------------+-----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+2 rows in set (0.00 sec)
+
+mysql> #sub_part = 3 => 3 characters are indexed from firstname
+mysql> 
+mysql> 
+mysql> #composite index - create index over multiple columns
+mysql> 
+mysql> ALTER TABLE EMPLOYEE
+    -> ADD INDEX MULTI(FIRSTNAME,LASTNAME,REPORTSTO);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SHOW INDEXES FROM EMPLOYEE;
++----------+------------+-----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| Table    | Non_unique | Key_name  | Seq_in_index | Column_name | Collation | Cardinality | Sub_part | Packed | Null | Index_type | Comment | Index_comment |
++----------+------------+-----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+| employee |          0 | PRIMARY   |            1 | EmployeeId  | A         |           8 |     NULL | NULL   |      | BTREE      |         |               |
+| employee |          1 | FirstName |            1 | FirstName   | A         |           8 |        3 | NULL   | YES  | BTREE      |         |               |
+| employee |          1 | MULTI     |            1 | FirstName   | A         |           8 |     NULL | NULL   | YES  | BTREE      |         |               |
+| employee |          1 | MULTI     |            2 | LastName    | A         |           8 |     NULL | NULL   | YES  | BTREE      |         |               |
+| employee |          1 | MULTI     |            3 | ReportsTo   | A         |           8 |     NULL | NULL   | YES  | BTREE      |         |               |
++----------+------------+-----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+
+5 rows in set (0.01 sec)
+
+mysql> #SEQ_IN_INDEX refers to the order of index
+mysql> ALTER TABLE EMPLOYEE DROP INDEX FIRSTNAME;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO EMPLOYEE(EMPLOYEEID,FIRSTNAME,LASTNAME,REPORTSTO) VALUES
+    -> (9,'Laura','King',1);
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT EMPLOYEEID,FIRSTNAME,REPORTSTO FROM EMPLOYEE  WHERE FIRSTNAME='Laura'
+    -> ;
++------------+-----------+-----------+
+| EMPLOYEEID | FIRSTNAME | REPORTSTO |
++------------+-----------+-----------+
+|          8 | Laura     |         6 |
+|          9 | Laura     |         1 |
++------------+-----------+-----------+
+2 rows in set (0.00 sec)
+
+mysql> EXPLAIN
+    -> SELECT EMPLOYEEID,FIRSTNAME,REPORTSTO FROM EMPLOYEE  WHERE FIRSTNAME='Laura';
++----+-------------+----------+------------+------+---------------+-------+---------+-------+------+----------+-------------+
+| id | select_type | table    | partitions | type | possible_keys | key   | key_len | ref   | rows | filtered | Extra       |
++----+-------------+----------+------------+------+---------------+-------+---------+-------+------+----------+-------------+
+|  1 | SIMPLE      | EMPLOYEE | NULL       | ref  | MULTI         | MULTI | 153     | const |    2 |   100.00 | Using index |
++----+-------------+----------+------------+------+---------------+-------+---------+-------+------+----------+-------------+
+1 row in set, 1 warning (0.01 sec)
+
+mysql> SELECT EMPLOYEEID,FIRSTNAME,REPORTSTO FROM EMPLOYEE  WHERE FIRSTNAME='Laura'
+    -> AND LASTNAME='King';
++------------+-----------+-----------+
+| EMPLOYEEID | FIRSTNAME | REPORTSTO |
++------------+-----------+-----------+
+|          9 | Laura     |         1 |
++------------+-----------+-----------+
+1 row in set (0.00 sec)
+
+mysql> EXPLAIN
+    -> SELECT EMPLOYEEID,FIRSTNAME,REPORTSTO FROM EMPLOYEE  WHERE FIRSTNAME='Laura' AND LASTNAME='King';
++----+-------------+----------+------------+------+---------------+-------+---------+-------------+------+----------+-------------+
+| id | select_type | table    | partitions | type | possible_keys | key   | key_len | ref         | rows | filtered | Extra       |
++----+-------------+----------+------------+------+---------------+-------+---------+-------------+------+----------+-------------+
+|  1 | SIMPLE      | EMPLOYEE | NULL       | ref  | MULTI         | MULTI | 306     | const,const |    1 |   100.00 | Using index |
++----+-------------+----------+------------+------+---------------+-------+---------+-------------+------+----------+-------------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> #key_len=153, 306 
+mysql> 
+mysql> SELECT EMPLOYEEID,FIRSTNAME,REPORTSTO FROM EMPLOYEE  WHERE FIRSTNAME='Laura' AND REPORTSTO=6;
++------------+-----------+-----------+
+| EMPLOYEEID | FIRSTNAME | REPORTSTO |
++------------+-----------+-----------+
+|          8 | Laura     |         6 |
++------------+-----------+-----------+
+1 row in set (0.00 sec)
+
+mysql> EXPLAIN
+    -> SELECT EMPLOYEEID,FIRSTNAME,REPORTSTO FROM EMPLOYEE  WHERE FIRSTNAME='Laura' AND REPORTSTO=6;
++----+-------------+----------+------------+------+---------------+-------+---------+-------+------+----------+--------------------------+
+| id | select_type | table    | partitions | type | possible_keys | key   | key_len | ref   | rows | filtered | Extra                    |
++----+-------------+----------+------------+------+---------------+-------+---------+-------+------+----------+--------------------------+
+|  1 | SIMPLE      | EMPLOYEE | NULL       | ref  | MULTI         | MULTI | 153     | const |    2 |    11.11 | Using where; Using index |
++----+-------------+----------+------------+------+---------------+-------+---------+-------+------+----------+--------------------------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> #key_len=153 => reportsto key in multi was not utilized bc no skipping
+mysql> 
+mysql> #functional index
+mysql> 
+mysql> ALTER TABLE EMPLOYEE
+    -> DROP INDEX MULTI;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE EMPLOYEE ADD INDEX (BIRTHDATE);
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> SELECT FIRSTNAME
+    -> FROM EMPLOYEE
+    -> WHERE YEAR(BIRTHDATE)='1973';
++-----------+
+| FIRSTNAME |
++-----------+
+| Jane      |
+| Michael   |
++-----------+
+2 rows in set (0.00 sec)
+
+mysql> EXPLAIN
+    -> SELECT FIRSTNAME FROM EMPLOYEE WHERE YEAR(BIRTHDATE)='1973';
++----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+
+| id | select_type | table    | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
++----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+
+|  1 | SIMPLE      | EMPLOYEE | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    8 |   100.00 | Using where |
++----+-------------+----------+------------+------+---------------+------+---------+------+------+----------+-------------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> ALTER TABLE EMPLOYEE ADD INDEX (YEAR(BIRTHDATE));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'BIRTHDATE))' at line 1
+mysql> ALTER TABLE EMPLOYEE ADD INDEX YR(YEAR(BIRTHDATE));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'BIRTHDATE))' at line 1
+mysql> ALTER TABLE EMPLOYEE ADD INDEX YR((YEAR(BIRTHDATE)));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(YEAR(BIRTHDATE)))' at line 1
+mysql> SELECT YEAR(BIRTHDATE)
+    -> FROM EMPLOYEE;
++-----------------+
+| YEAR(BIRTHDATE) |
++-----------------+
+|            NULL |
+|            1947 |
+|            1958 |
+|            1962 |
+|            1965 |
+|            1968 |
+|            1970 |
+|            1973 |
+|            1973 |
++-----------------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT YEAR(BIRTHDATE) FROM EMPLOYEE;
++-----------------+
+| YEAR(BIRTHDATE) |
++-----------------+
+|            1947 |
+|            1958 |
+|            1962 |
+|            1965 |
+|            1968 |
+|            1970 |
+|            1973 |
+|            1973 |
+|            1973 |
++-----------------+
+9 rows in set (0.01 sec)
+
+mysql> ALTER TABLE EMPLOYEE ADD INDEX YR((YEAR(BIRTHDATE)));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(YEAR(BIRTHDATE)))' at line 1
+mysql> ALTER TABLE EMPLOYEE ADD INDEX Y(YEAR(BIRTHDATE));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'BIRTHDATE))' at line 1
+mysql> 
+mysql> 
+mysql> 
+mysql> 
+mysql> CREATE TABLE TEACHERS(
+    -> TID BIGINT UNSIGNED PRIMARY KEY,
+    -> NAME VARCHAR(30),
+    -> COURSE_ID VARCHAR(10),
+    -> FOREIGN KEY(COURSE_ID)
+    -> REFERENCES COURSE(COURSE_ID));
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO TEACHERS(NAME,COURSE_ID) VALUES
+    -> ('Maya','CS-101'),
+    -> ('Anu','BIO-301'),
+    -> ('Patrick','CS-315');
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM TEACHERS;
++-----+---------+-----------+
+| TID | NAME    | COURSE_ID |
++-----+---------+-----------+
+|   1 | Maya    | CS-101    |
+|   2 | Anu     | BIO-301   |
+|   3 | Patrick | CS-315    |
++-----+---------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT TITLE,NAME FROM COURSE,TEACHERS
+    -> WHERE COURSE.COUSE_ID=TEACHERS.COURSE_ID;
+ERROR 1054 (42S22): Unknown column 'COURSE.COUSE_ID' in 'where clause'
+mysql> SELECT TITLE,NAME FROM COURSE,TEACHERS WHERE COURSE.COURSE_ID = TEACHERS.COURSE_ID;
++------------+---------+
+| TITLE      | NAME    |
++------------+---------+
+| Basic Prgm | Maya    |
+| Genetics   | Anu     |
+| Robotocs   | Patrick |
++------------+---------+
+3 rows in set (0.01 sec)
+
+  [CASCADEBookmarked 21-Apr-2023 at 2:47:04 PM]
+mysql> CREATE TABLE Child3(ID BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, PARENT_ID BIGINT UNSIGNED ,FOREIGN KEY (PARENT_ID) REFERENCES PARENT(ID) ON DELETE SET NULL;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
+mysql> CREATE TABLE Child3(ID BIGINT UNSIGNED AUTO_INCREMENT PRIMARY KEY, PARENT_ID BIGINT UNSIGNED ,FOREIGN KEY (PARENT_ID) REFERENCES PARENT(ID) ON DELETE SET NULL);
+Query OK, 0 rows affected (0.02 sec)
+
+mysql> INSERT INTO PARENT(ID) VALUE(2),(3)
+    -> (1);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(1)' at line 2
+mysql> INSERT INTO PARENT(ID) VALUE(2),(3), (1);
+Query OK, 3 rows affected (0.00 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO CHILD3(PARENT_ID) VALUE(1),(2),(3);
+Query OK, 3 rows affected (0.01 sec)
+Records: 3  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM PARENT;
++----+
+| ID |
++----+
+|  1 |
+|  2 |
+|  3 |
++----+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM CHILD;
+ERROR 1146 (42S02): Table 'nirmala.child' doesn't exist
+mysql> SELECT * FROM CHILD3;
++----+-----------+
+| ID | PARENT_ID |
++----+-----------+
+|  4 |         1 |
+|  5 |         2 |
+|  6 |         3 |
++----+-----------+
+3 rows in set (0.00 sec)
+
+mysql> DELETE FROM PARENT WHERE ID=2;
+Query OK, 1 row affected (0.01 sec)
+
+mysql> SELECT * FROM CHILD3;
++----+-----------+
+| ID | PARENT_ID |
++----+-----------+
+|  5 |      NULL |
+|  4 |         1 |
+|  6 |         3 |
++----+-----------+
+3 rows in set (0.00 sec)
+
+mysql> DESCRIBE STUDENTS;
++-----------+-------------------+------+-----+---------+-------+
+| Field     | Type              | Null | Key | Default | Extra |
++-----------+-------------------+------+-----+---------+-------+
+| ID        | char(3)           | NO   |     | NULL    |       |
+| ROLL_NO   | smallint(6)       | YES  |     | NULL    |       |
+| FNAME     | varchar(50)       | NO   |     | NULL    |       |
+| LNAME     | varchar(70)       | YES  |     | NULL    |       |
+| DOB       | date              | YES  |     | NULL    |       |
+| DEPT_CODE | char(4)           | YES  |     | NULL    |       |
+| GENDER    | enum('M','F','O') | YES  |     | NULL    |       |
+| FEES      | int(11)           | YES  |     | 5000    |       |
+| COURSE    | varchar(30)       | YES  |     | NULL    |       |
+| HOBBY     | varchar(30)       | YES  |     | NULL    |       |
++-----------+-------------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> ALTER TABLE STUDENTS
+    -> ADD PRIMARY KEY(ID,ROLL_NO);
+Query OK, 0 rows affected (0.10 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE STUDENTS;
++-----------+-------------------+------+-----+---------+-------+
+| Field     | Type              | Null | Key | Default | Extra |
++-----------+-------------------+------+-----+---------+-------+
+| ID        | char(3)           | NO   | PRI | NULL    |       |
+| ROLL_NO   | smallint(6)       | NO   | PRI | NULL    |       |
+| FNAME     | varchar(50)       | NO   |     | NULL    |       |
+| LNAME     | varchar(70)       | YES  |     | NULL    |       |
+| DOB       | date              | YES  |     | NULL    |       |
+| DEPT_CODE | char(4)           | YES  |     | NULL    |       |
+| GENDER    | enum('M','F','O') | YES  |     | NULL    |       |
+| FEES      | int(11)           | YES  |     | 5000    |       |
+| COURSE    | varchar(30)       | YES  |     | NULL    |       |
+| HOBBY     | varchar(30)       | YES  |     | NULL    |       |
++-----------+-------------------+------+-----+---------+-------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT * FROM COURSE LEFT JOIN PREREQ ON COURSE.COURSEID=PREREQ.COURSE_ID
+    -> UNION
+    -> SELECT * FROM COURSE RIGHT JOIN PREREQ ON COURSE.COURSEID=PREREQ.COURSE_ID;
+ERROR 1054 (42S22): Unknown column 'COURSE.COURSEID' in 'on clause'
+mysql> SELECT * FROM COURSE LEFT JOIN PREREQ ON COURSE.COURSE_ID=PREREQ.COURSE_ID UNION SELECT * FROM COURSE RIGHT JOIN PREREQ ON COURSE.COURSE_ID=PREREQ.COURSE_ID;
++-----------+---------------+------------+---------+-----------+-----------+
+| COURSE_ID | TITLE         | DEPT_NAME  | CREDITS | COURSE_ID | PREREQ_ID |
++-----------+---------------+------------+---------+-----------+-----------+
+| BIO-301   | Genetics      | Biology    |       4 | BIO-301   | BIO-101   |
+| CS-190    | Game Design   | Comp. Sci. |       4 | CS-190    | CS-101    |
+| BIO-101   | Basic Biology | Biology    |       4 | NULL      | NULL      |
+| CS-101    | Basic Prgm    | Comp. Sci. |       3 | NULL      | NULL      |
+| CS-315    | Robotocs      | Comp. Sci. |       3 | NULL      | NULL      |
+| NULL      | NULL          | NULL       |    NULL | CS-347    | CS-101    |
++-----------+---------------+------------+---------+-----------+-----------+
+6 rows in set (0.01 sec)
+
+mysql> 
