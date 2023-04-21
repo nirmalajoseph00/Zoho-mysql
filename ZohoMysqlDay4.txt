@@ -54,10 +54,10 @@ mysql> CREATE TABLE StudentDetails(
     -> LastName VARCHAR(50),
     -> Gender ENUM('M','F','O') NOT NULL,
     -> Email VARCHAR(60),
-    -> YearOfBirth DATE,
-mysql> CREATE TABLE StudentDetails( ID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(30) NOT NULL, LastName VARCHAR(50), Gender ENUM('M','F','O') NOT NULL, Email VARCHAR(60), YearOfBirth DATE, PRIMARY KEY(ID);
+    -> YearOfBirth YEAR,
+mysql> CREATE TABLE StudentDetails( ID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(30) NOT NULL, LastName VARCHAR(50), Gender ENUM('M','F','O') NOT NULL, Email VARCHAR(60), YearOfBirth YEAR, PRIMARY KEY(ID);
 ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '' at line 1
-mysql> CREATE TABLE StudentDetails( ID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(30) NOT NULL, LastName VARCHAR(50), Gender ENUM('M','F','O') NOT NULL, Email VARCHAR(60), YearOfBirth DATE, PRIMARY KEY(ID));
+mysql> CREATE TABLE StudentDetails( ID INT NOT NULL AUTO_INCREMENT, FirstName VARCHAR(30) NOT NULL, LastName VARCHAR(50), Gender ENUM('M','F','O') NOT NULL, Email VARCHAR(60), YearOfBirth YEAR, PRIMARY KEY(ID));
 Query OK, 0 rows affected (0.02 sec)
 
 mysql> DESCRIBE StudentDetails;
@@ -69,7 +69,7 @@ mysql> DESCRIBE StudentDetails;
 | LastName    | varchar(50)       | YES  |     | NULL    |                |
 | Gender      | enum('M','F','O') | NO   |     | NULL    |                |
 | Email       | varchar(60)       | YES  |     | NULL    |                |
-| YearOfBirth | date              | YES  |     | NULL    |                |
+| YearOfBirth | year(4)           | YES  |     | NULL    |                |
 +-------------+-------------------+------+-----+---------+----------------+
 6 rows in set (0.01 sec)
 
