@@ -1,0 +1,575 @@
+Last login: Fri Apr 21 07:51:56 on ttys001
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+nirmala-pt7167:~ nirmala-pt7167$ mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 26
+Server version: 5.7.41 Homebrew
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> USE STUDENT;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_student |
++-------------------+
+| StudentDetails    |
++-------------------+
+1 row in set (0.00 sec)
+
+mysql> DESCRIBE TABLE STUDENTDETAILS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TABLE STUDENTDETAILS' at line 1
+mysql> DESCRIBE STUDENTDETAILS;
++-----------------+-------------------+------+-----+---------+----------------+
+| Field           | Type              | Null | Key | Default | Extra          |
++-----------------+-------------------+------+-----+---------+----------------+
+| ID              | int(11)           | NO   | PRI | NULL    | auto_increment |
+| FirstName       | varchar(30)       | NO   |     | NULL    |                |
+| LastName        | varchar(50)       | YES  |     | NULL    |                |
+| STD             | smallint(6)       | YES  |     | NULL    |                |
+| Branch          | char(2)           | YES  |     | NA      |                |
+| Gender          | enum('M','F','O') | NO   |     | NULL    |                |
+| Email           | varchar(60)       | YES  |     | NULL    |                |
+| DateOfBirth     | date              | YES  |     | NULL    |                |
+| YearOfAdmission | year(4)           | YES  |     | NULL    |                |
++-----------------+-------------------+------+-----+---------+----------------+
+9 rows in set (0.01 sec)
+
+mysql> ALTER TABLE STUDENTDETAILS DROP PRIMARY KEY, CHANGE ID ID INT;
+Query OK, 9 rows affected (0.03 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE STUDENTDEATILS ADD PRIMARY KEY (ID,EMAILID);
+ERROR 1146 (42S02): Table 'student.studentdeatils' doesn't exist
+mysql> ALTER TABLE STUDENTDETAILS ADD PRIMARY KEY (ID,EMAILID);
+ERROR 1072 (42000): Key column 'EMAILID' doesn't exist in table
+mysql> ALTER TABLE STUDENTDETAILS ADD PRIMARY KEY (ID,EMAIL);
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE STUDENTDETAILS CHANGE ID ID INT AUTO_INCREMENT;
+Query OK, 9 rows affected (0.03 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> DESCIBE STUDENTDETAILS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESCIBE STUDENTDETAILS' at line 1
+mysql> DESCRIBE STUDENTDETAILS;
++-----------------+-------------------+------+-----+---------+----------------+
+| Field           | Type              | Null | Key | Default | Extra          |
++-----------------+-------------------+------+-----+---------+----------------+
+| ID              | int(11)           | NO   | PRI | NULL    | auto_increment |
+| FirstName       | varchar(30)       | NO   |     | NULL    |                |
+| LastName        | varchar(50)       | YES  |     | NULL    |                |
+| STD             | smallint(6)       | YES  |     | NULL    |                |
+| Branch          | char(2)           | YES  |     | NA      |                |
+| Gender          | enum('M','F','O') | NO   |     | NULL    |                |
+| Email           | varchar(60)       | NO   | PRI | NULL    |                |
+| DateOfBirth     | date              | YES  |     | NULL    |                |
+| YearOfAdmission | year(4)           | YES  |     | NULL    |                |
++-----------------+-------------------+------+-----+---------+----------------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTDETAILS
+    -> WHERE ID BETWEEN 103 AND 107;
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+| ID  | FirstName | LastName | STD  | Branch | Gender | Email                     | DateOfBirth | YearOfAdmission |
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+| 103 | Joe       | McLain   |   11 | A1     | M      | joemclain103@mail.com     | 1999-06-02  |            2007 |
+| 104 | Zachery   | Erlich   |    9 | NA     | M      | zacheryerlich104@mail.com | 2001-01-15  |            2007 |
+| 105 | Susan     | Barlet   |   11 | A1     | F      | susanbarlet105@mail.com   | 1999-09-09  |            2010 |
+| 106 | Riya      | Sharma   |    9 | NA     | F      | riyasharma106@mail.com    | 2002-01-02  |            2010 |
+| 107 | Sanchit   | Kumar    |   11 | A2     | M      | sanchitkumar107@mail.com  | 1998-12-12  |            2005 |
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+5 rows in set (0.00 sec)
+
+mysql> EXPLAIN
+    -> SELECT * FROM STUDENTDETAILS WHERE ID BETWEEN 103 AND 107;;
++----+-------------+----------------+------------+-------+---------------+---------+---------+------+------+----------+-------------+
+| id | select_type | table          | partitions | type  | possible_keys | key     | key_len | ref  | rows | filtered | Extra       |
++----+-------------+----------------+------------+-------+---------------+---------+---------+------+------+----------+-------------+
+|  1 | SIMPLE      | STUDENTDETAILS | NULL       | range | PRIMARY       | PRIMARY | 4       | NULL |    5 |   100.00 | Using where |
++----+-------------+----------------+------------+-------+---------------+---------+---------+------+------+----------+-------------+
+1 row in set, 1 warning (0.00 sec)
+
+ERROR: 
+No query specified
+
+mysql> SELECT * FROM STUDENTDETAILS
+    -> WHERE EMAIL LIKE '%n10%';
++-----+-----------+----------+------+--------+--------+-------------------------+-------------+-----------------+
+| ID  | FirstName | LastName | STD  | Branch | Gender | Email                   | DateOfBirth | YearOfAdmission |
++-----+-----------+----------+------+--------+--------+-------------------------+-------------+-----------------+
+| 101 | Susan     | McLain   |   10 | NA     | F      | susanmclain101@mail.com | 2000-02-07  |            2007 |
+| 103 | Joe       | McLain   |   11 | A1     | M      | joemclain103@mail.com   | 1999-06-02  |            2007 |
++-----+-----------+----------+------+--------+--------+-------------------------+-------------+-----------------+
+2 rows in set (0.00 sec)
+
+mysql> EXPLAIN
+    -> SELECT * FROM STUDENTDETAILS WHERE EMAIL LIKE '%n10%';
++----+-------------+----------------+------------+------+---------------+------+---------+------+------+----------+-------------+
+| id | select_type | table          | partitions | type | possible_keys | key  | key_len | ref  | rows | filtered | Extra       |
++----+-------------+----------------+------------+------+---------------+------+---------+------+------+----------+-------------+
+|  1 | SIMPLE      | STUDENTDETAILS | NULL       | ALL  | NULL          | NULL | NULL    | NULL |    9 |    11.11 | Using where |
++----+-------------+----------------+------------+------+---------------+------+---------+------+------+----------+-------------+
+1 row in set, 1 warning (0.00 sec)
+
+mysql> #searching with email, it goes through all rows to get the result while when searching with id it only went through 5 required rows
+mysql> CREATE TABLE MARK(ID INT AUTO_INCREMENT,
+    -> MATH SMALLINT,
+    -> PHY SMALLINT,
+    -> CHEM SMALLINT,
+    -> ENG SMALLINT,
+    -> BIO SMALLINT,
+    -> ECO SMALLINT,
+    -> HIS SMALLINT);
+ERROR 1075 (42000): Incorrect table definition; there can be only one auto column and it must be defined as a key
+mysql> CREATE TABLE MARK(ID INT AUTO_INCREMENT, MATH SMALLINT, PHY SMALLINT, CHEM SMALLINT, ENG SMALLINT, BIO SMALLINT, ECO SMALLINT, HIS SMALLINT, PRIMARY KEY (ID));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE TABLE MARK(MATH, PHY, CHEM, ENG, BIO, ECO, HIS)
+    -> SELECT Maths,Physics,Chemistry,English,Biology,Economics,History
+    -> FROM STUDENT_MARKS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ' PHY, CHEM, ENG, BIO, ECO, HIS)
+SELECT Maths,Physics,Chemistry,English,Biology,E' at line 1
+mysql> INSERT INTO MARK(MATH, PHY, CHEM, ENG, BIO, ECO, HIS) SELECT Maths,Physics,Chemistry,English,Biology,Economics,History FROM STUDENT_MARKS;
+Query OK, 10 rows affected (0.00 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE MARK AUTO_INCREMENT=100;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO MARK(MATH, PHY, CHEM, ENG, BIO, ECO, HIS) SELECT Maths,Physics,Chemistry,English,Biology,Economics,History FROM STUDENT_MARKS;
+Query OK, 10 rows affected (0.00 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM MARK;
++-----+------+------+------+------+------+------+------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  |
++-----+------+------+------+------+------+------+------+
+| 100 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |
+| 101 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |
+| 102 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |
+| 103 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |
+| 104 |   58 |   96 |   78 |   46 |   96 |   77 |   83 |
+| 105 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |
+| 106 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |
+| 107 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |
+| 108 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |
+| 109 |   58 |   96 |   78 |   46 |   96 |   77 |   83 |
++-----+------+------+------+------+------+------+------+
+10 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,SUBJECT,MARK,STD 
+    -> FROM(FIRSTNAME,'Maths' as Subject,MATH AS Mark,STD FROM STUDENTDETAILS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL 
+    -> FIRSTNAME,'Phy' as Subject,PHY AS Mark,STD FROM STUDENTDETAILS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> FIRSTNAME,'Chem' as Subject,CHEM AS Mark,STD FROM STUDENTDETAILS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> FIRSTNAME,'Eng' as Subject,ENG AS Mark,STD FROM STUDENTDETAILS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> FIRSTNAME,'Bio' as Subject,BIO AS Mark,STD FROM STUDENTDETAILS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> FIRSTNAME,'Eco' as Subject,ECO AS Mark,STD FROM STUDENTDETAILS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> FIRSTNAME,'History' as Subject,HIS AS Mark,STD FROM STUDENTDETAILS S INNER JOIN MARK AS M WHERE S.ID=M.ID)
+    -> AS SUB_MARK
+    -> WHERE Mark>90;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near ''Maths' as Subject,MATH AS Mark,STD FROM STUDENTDETAILS S INNER JOIN MARK AS M W' at line 2
+mysql> SELECT * 
+    -> FROM(SELECT FIRSTNAME,'Maths' as Subject,MATH AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL 
+    -> SELECT FIRSTNAME,'Phy' as Subject,PHY AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'Chem' as Subject,CHEM AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'Eng' as Subject,ENG AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'Bio' as Subject,BIO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'Eco' as Subject,ECO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'History' as Subject,HIS AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID) 
+    -> AS SUB_MARK
+    -> WHERE Mark>90;
++-----------+---------+------+------+
+| FIRSTNAME | Subject | Mark | STD  |
++-----------+---------+------+------+
+| Zachery   | Phy     |   96 |    9 |
+| Tania     | Phy     |   96 |   10 |
+| Susan     | Bio     |   95 |    9 |
+| Zachery   | Bio     |   96 |    9 |
+| Sanchit   | Bio     |   95 |   11 |
+| Tania     | Bio     |   96 |   10 |
++-----------+---------+------+------+
+6 rows in set (0.01 sec)
+
+mysql> ALTER TABLE MARK ADD CONSTRAINT FOREIGN KEY(ID) REFERENCES STUDENTDETAILS(ID) ON DELETE CASCADE;
+Query OK, 10 rows affected (0.03 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM STUDENTDETAILS;
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+| ID  | FirstName | LastName | STD  | Branch | Gender | Email                     | DateOfBirth | YearOfAdmission |
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+| 100 | Zachery   | Erlich   |   10 | NA     | M      | zacheryerlich100@mail.com | 2000-12-17  |            2007 |
+| 101 | Susan     | McLain   |   10 | NA     | F      | susanmclain101@mail.com   | 2000-02-07  |            2007 |
+| 102 | Susan     | Barlet   |    9 | NA     | F      | susanbarlet102@mail.com   | 2001-03-27  |            2007 |
+| 103 | Joe       | McLain   |   11 | A1     | M      | joemclain103@mail.com     | 1999-06-02  |            2007 |
+| 104 | Zachery   | Erlich   |    9 | NA     | M      | zacheryerlich104@mail.com | 2001-01-15  |            2007 |
+| 105 | Susan     | Barlet   |   11 | A1     | F      | susanbarlet105@mail.com   | 1999-09-09  |            2010 |
+| 106 | Riya      | Sharma   |    9 | NA     | F      | riyasharma106@mail.com    | 2002-01-02  |            2010 |
+| 107 | Sanchit   | Kumar    |   11 | A2     | M      | sanchitkumar107@mail.com  | 1998-12-12  |            2005 |
+| 108 | Mohan     | Ashok    |   11 | A2     | M      | mohanashok108@mail.com    | 1999-07-02  |            2006 |
+| 109 | Tania     | Rai      |   10 | NA     | F      | taniarai109@mail.com      | 2000-04-22  |            2013 |
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+10 rows in set (0.00 sec)
+
+mysql> DELETE FROM STUDENTDETAILS WHERE ID=109;
+Query OK, 1 row affected (0.00 sec)
+
+mysql> SELECT * FROM STUDENTDETAILS;
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+| ID  | FirstName | LastName | STD  | Branch | Gender | Email                     | DateOfBirth | YearOfAdmission |
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+| 100 | Zachery   | Erlich   |   10 | NA     | M      | zacheryerlich100@mail.com | 2000-12-17  |            2007 |
+| 101 | Susan     | McLain   |   10 | NA     | F      | susanmclain101@mail.com   | 2000-02-07  |            2007 |
+| 102 | Susan     | Barlet   |    9 | NA     | F      | susanbarlet102@mail.com   | 2001-03-27  |            2007 |
+| 103 | Joe       | McLain   |   11 | A1     | M      | joemclain103@mail.com     | 1999-06-02  |            2007 |
+| 104 | Zachery   | Erlich   |    9 | NA     | M      | zacheryerlich104@mail.com | 2001-01-15  |            2007 |
+| 105 | Susan     | Barlet   |   11 | A1     | F      | susanbarlet105@mail.com   | 1999-09-09  |            2010 |
+| 106 | Riya      | Sharma   |    9 | NA     | F      | riyasharma106@mail.com    | 2002-01-02  |            2010 |
+| 107 | Sanchit   | Kumar    |   11 | A2     | M      | sanchitkumar107@mail.com  | 1998-12-12  |            2005 |
+| 108 | Mohan     | Ashok    |   11 | A2     | M      | mohanashok108@mail.com    | 1999-07-02  |            2006 |
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT * FROM MARK;
++-----+------+------+------+------+------+------+------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  |
++-----+------+------+------+------+------+------+------+
+| 100 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |
+| 101 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |
+| 102 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |
+| 103 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |
+| 104 |   58 |   96 |   78 |   46 |   96 |   77 |   83 |
+| 105 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |
+| 106 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |
+| 107 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |
+| 108 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |
++-----+------+------+------+------+------+------+------+
+9 rows in set (0.00 sec)
+
+mysql> CREATE TABLE MARK_PRE(ID INT AUTO_INCREMENT=100, MATH SMALLINT, PHY SMALLINT, CHEM SMALLINT, ENG SMALLINT, BIO SMALLINT, ECO SMALLINT, HIS SMALLINT, PRIMARY KEY (ID));
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '=100, MATH SMALLINT, PHY SMALLINT, CHEM SMALLINT, ENG SMALLINT, BIO SMALLINT, EC' at line 1
+mysql> CREATE TABLE MARK_PRE(ID INT AUTO_INCREMENT, MATH SMALLINT, PHY SMALLINT, CHEM SMALLINT, ENG SMALLINT, BIO SMALLINT, ECO SMALLINT, HIS SMALLINT, PRIMARY KEY (ID));
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> ALTER TABLE MARK_PRE AUTO_INCREMENT=100;
+Query OK, 0 rows affected (0.01 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> DESCRIBE MARK_PRE;
++-------+-------------+------+-----+---------+----------------+
+| Field | Type        | Null | Key | Default | Extra          |
++-------+-------------+------+-----+---------+----------------+
+| ID    | int(11)     | NO   | PRI | NULL    | auto_increment |
+| MATH  | smallint(6) | YES  |     | NULL    |                |
+| PHY   | smallint(6) | YES  |     | NULL    |                |
+| CHEM  | smallint(6) | YES  |     | NULL    |                |
+| ENG   | smallint(6) | YES  |     | NULL    |                |
+| BIO   | smallint(6) | YES  |     | NULL    |                |
+| ECO   | smallint(6) | YES  |     | NULL    |                |
+| HIS   | smallint(6) | YES  |     | NULL    |                |
++-------+-------------+------+-----+---------+----------------+
+8 rows in set (0.01 sec)
+
+mysql> INSERT INTO MARK(MATH, PHY, CHEM, ENG, BIO, ECO, HIS) SELECT Biology,Economics,History,Maths,Physics,Chemistry,English FROM STUDENT_MARKS;
+ERROR 1452 (23000): Cannot add or update a child row: a foreign key constraint fails (`student`.`mark`, CONSTRAINT `mark_ibfk_1` FOREIGN KEY (`ID`) REFERENCES `STUDENTDETAILS` (`ID`) ON DELETE CASCADE)
+mysql> INSERT INTO MARK_PRE(MATH, PHY, CHEM, ENG, BIO, ECO, HIS) SELECT Biology,Economics,History,Maths,Physics,Chemistry,English FROM STUDENT_MARKS;
+Query OK, 10 rows affected (0.00 sec)
+Records: 10  Duplicates: 0  Warnings: 0
+
+mysql> ALTER TABLE MARK_PRE ADD CONSTRAINT FOREIGN KEY(ID) REFERENCES STUDENTDETAILS(ID) ON DELETE CASCADE;
+Query OK, 9 rows affected (0.02 sec)
+Records: 9  Duplicates: 0  Warnings: 0
+
+mysql> SELECT * FROM MARK_PRE;
++-----+------+------+------+------+------+------+------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  |
++-----+------+------+------+------+------+------+------+
+| 100 |   21 |   52 |   89 |   55 |   45 |   56 |   87 |
+| 101 |   90 |   61 |   58 |   75 |   55 | NULL |   64 |
+| 102 |   95 |   87 |   56 |   25 |   54 |   89 |   76 |
+| 103 |   54 |   89 |   75 |   78 |   55 |   86 |   63 |
+| 104 |   96 |   77 |   83 |   58 |   96 |   78 |   46 |
+| 105 |   21 |   52 |   89 |   55 |   45 |   56 |   87 |
+| 106 |   90 |   61 |   58 |   75 |   55 | NULL |   64 |
+| 107 |   95 |   87 |   56 |   25 |   54 |   89 |   76 |
+| 108 |   54 |   89 |   75 |   78 |   55 |   86 |   63 |
++-----+------+------+------+------+------+------+------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,Subject,Mark  FROM(SELECT FIRSTNAME,'Maths' as Subject,MATH AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL  SELECT FIRSTNAME,'Phy' as Subject,PHY AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Chem' as Subject,CHEM AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Eng' as Subject,ENG AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Bio' as Subject,BIO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Eco' as Subject,ECO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'History' as Subject,HIS AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID)  AS SUB_MARK WHERE Mark=NULL;
+Empty set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,Subject,Mark  FROM(SELECT FIRSTNAME,'Maths' as Subject,MATH AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL  SELECT FIRSTNAME,'Phy' as Subject,PHY AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Chem' as Subject,CHEM AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Eng' as Subject,ENG AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Bio' as Subject,BIO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Eco' as Subject,ECO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'History' as Subject,HIS AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID)  AS SUB_MARK WHERE Mark IS NULL;
++-----------+---------+------+
+| FIRSTNAME | Subject | Mark |
++-----------+---------+------+
+| Susan     | Chem    | NULL |
+| Riya      | Chem    | NULL |
++-----------+---------+------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME, Subject, Mark 
+    -> FROM
+    -> (SELECT FIRSTNAME,'Maths' as Subject,MATH AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID
+    -> UNION ALL 
+    -> SELECT FIRSTNAME,'Phy' as Subject,PHY AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'Chem' as Subject,CHEM AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'Eng' as Subject,ENG AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'Bio' as Subject,BIO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'Eco' as Subject,ECO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID
+    -> UNION ALL
+    -> SELECT FIRSTNAME,'History' as Subject,HIS AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID) AS TBL
+    -> WHERE Mark IS NULL;
++-----------+---------+------+
+| FIRSTNAME | Subject | Mark |
++-----------+---------+------+
+| Riya      | Eco     | NULL |
+| Susan     | Eco     | NULL |
++-----------+---------+------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME,Subject,Mark,STD FROM(
+    -> (
+    -> SELECT FIRSTNAME, Subject, Mark  FROM (SELECT FIRSTNAME,'Maths' as Subject,MATH AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID UNION ALL  SELECT FIRSTNAME,'Phy' as Subject,PHY AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Chem' as Subject,CHEM AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Eng' as Subject,ENG AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Bio' as Subject,BIO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Eco' as Subject,ECO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'History' as Subject,HIS AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK_PRE AS M WHERE S.ID=M.ID) AS TBL WHERE MarK>90
+    -> )AS PRE_90
+    -> INTERSECT
+    -> (
+    -> SELECT FIRSTNAME,Subject,Mark  FROM(SELECT FIRSTNAME,'Maths' as Subject,MATH AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL  SELECT FIRSTNAME,'Phy' as Subject,PHY AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Chem' as Subject,CHEM AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Eng' as Subject,ENG AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Bio' as Subject,BIO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'Eco' as Subject,ECO AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID UNION ALL SELECT FIRSTNAME,'History' as Subject,HIS AS Mark,STD FROM STUDENTDETAILS AS S INNER JOIN MARK AS M WHERE S.ID=M.ID)  AS SUB_MARK WHERE Mark>90 )
+    -> AS THISYR_90;                                                                                                         ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INTERSECT
+(
+SELECT FIRSTNAME,Subject,Mark  FROM(SELECT FIRSTNAME,'Maths' as Subj' at line 5
+mysql>                                                                                                                       mysql> 
+mysql> 
+mysql> 
+mysql> ALTER TABLE MARK
+    -> ADD COLUMN Total_Mark SMALLINT;
+Query OK, 0 rows affected (0.12 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> UPDATE MARK
+    -> SET Total_Mark=MATH+ PHY+ CHEM+  ENG+ BIO+ ECO+ HIS;
+Query OK, 7 rows affected (0.00 sec)
+Rows matched: 9  Changed: 7  Warnings: 0
+
+mysql> ALTER TABLE MARK_PRE ADD COLUMN Total_Mark SMALLINT;
+Query OK, 0 rows affected (0.13 sec)
+Records: 0  Duplicates: 0  Warnings: 0
+
+mysql> UPDATE MARK_PRE SET Total_Mark=MATH+ PHY+ CHEM+  ENG+ BIO+ ECO+ HIS;
+Query OK, 7 rows affected (0.01 sec)
+Rows matched: 9  Changed: 7  Warnings: 0
+
+mysql> SELECT * MARK;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'MARK' at line 1
+mysql> SELECT * FROM MARK;
++-----+------+------+------+------+------+------+------+------------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  | Total_Mark |
++-----+------+------+------+------+------+------+------+------------+
+| 100 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 |
+| 101 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |       NULL |
+| 102 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 |
+| 103 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 |
+| 104 |   58 |   96 |   78 |   46 |   96 |   77 |   83 |        534 |
+| 105 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 |
+| 106 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |       NULL |
+| 107 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 |
+| 108 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 |
++-----+------+------+------+------+------+------+------+------------+
+9 rows in set (0.00 sec)
+
+mysql> UPDATE MARK SET Total_Mark= SUM(COALESCE(MATH+ PHY+ CHEM+  ENG+ BIO+ ECO+ HIS));
+ERROR 1111 (HY000): Invalid use of group function
+mysql> UPDATE MARK SET Total_Mark=COALESCE(MATH+ PHY+ CHEM+  ENG+ BIO+ ECO+ HIS);
+Query OK, 0 rows affected (0.00 sec)
+Rows matched: 9  Changed: 0  Warnings: 0
+
+mysql> SELECT * FROM MARK;
++-----+------+------+------+------+------+------+------+------------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  | Total_Mark |
++-----+------+------+------+------+------+------+------+------------+
+| 100 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 |
+| 101 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |       NULL |
+| 102 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 |
+| 103 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 |
+| 104 |   58 |   96 |   78 |   46 |   96 |   77 |   83 |        534 |
+| 105 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 |
+| 106 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |       NULL |
+| 107 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 |
+| 108 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 |
++-----+------+------+------+------+------+------+------+------------+
+9 rows in set (0.00 sec)
+
+mysql> UPDATE MARK SET Total_Mark=COALESCE(MATH,0)+COALESCE( PHY,0)+COALESCE( CHEM,0)+COALESCE(ENG,0)+COALESCE(BIO,0)+COALESCE(ECO,0)+COALESCE(HIS,0);
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 9  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM MARK;                                                                                                   +-----+------+------+------+------+------+------+------+------------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  | Total_Mark |
++-----+------+------+------+------+------+------+------+------------+
+| 100 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 |
+| 101 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |        403 |
+| 102 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 |
+| 103 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 |
+| 104 |   58 |   96 |   78 |   46 |   96 |   77 |   83 |        534 |
+| 105 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 |
+| 106 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |        403 |
+| 107 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 |
+| 108 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 |
++-----+------+------+------+------+------+------+------+------------+
+9 rows in set (0.00 sec)
+
+mysql> UPDATE MARK_PRE SET Total_Mark=COALESCE(MATH,0)+COALESCE( PHY,0)+COALESCE( CHEM,0)+COALESCE(ENG,0)+COALESCE(BIO,0)+COALESCE(ECO,0)+COALESCE(HIS,0);
+Query OK, 2 rows affected (0.01 sec)
+Rows matched: 9  Changed: 2  Warnings: 0
+
+mysql> SELECT * FROM MARK_PRE;                                                                                               +-----+------+------+------+------+------+------+------+------------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  | Total_Mark |
++-----+------+------+------+------+------+------+------+------------+
+| 100 |   21 |   52 |   89 |   55 |   45 |   56 |   87 |        405 |
+| 101 |   90 |   61 |   58 |   75 |   55 | NULL |   64 |        403 |
+| 102 |   95 |   87 |   56 |   25 |   54 |   89 |   76 |        482 |
+| 103 |   54 |   89 |   75 |   78 |   55 |   86 |   63 |        500 |
+| 104 |   96 |   77 |   83 |   58 |   96 |   78 |   46 |        534 |
+| 105 |   21 |   52 |   89 |   55 |   45 |   56 |   87 |        405 |
+| 106 |   90 |   61 |   58 |   75 |   55 | NULL |   64 |        403 |
+| 107 |   95 |   87 |   56 |   25 |   54 |   89 |   76 |        482 |
+| 108 |   54 |   89 |   75 |   78 |   55 |   86 |   63 |        500 |
++-----+------+------+------+------+------+------+------+------------+
+9 rows in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME, MAX(Total_Mark) AS HighestTotalMark FROM MARK AS M,STUDENTDETAILS AS S WHERE STD=10 AND S.ID=M.ID;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'student.S.FirstName'; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10;
++-----+-----------+
+| ID  | FIRSTNAME |
++-----+-----------+
+| 100 | Zachery   |
+| 101 | Susan     |
++-----+-----------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT FIRSTNAME,MAX(TOTAL_MARK) 
+    -> FROM MARK AS M INNER JOIN
+    -> (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'T4.FIRSTNAME'; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT *                                                                                                                  -> FROM MARK AS M INNER JOIN
+    -> (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4;                                                         +-----+------+------+------+------+------+------+------+------------+-----+-----------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  | Total_Mark | ID  | FIRSTNAME |
++-----+------+------+------+------+------+------+------+------------+-----+-----------+
+| 100 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 | 100 | Zachery   |
+| 100 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 | 101 | Susan     |
+| 101 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |        403 | 100 | Zachery   |
+| 101 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |        403 | 101 | Susan     |
+| 102 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 | 100 | Zachery   |
+| 102 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 | 101 | Susan     |
+| 103 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 | 100 | Zachery   |
+| 103 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 | 101 | Susan     |
+| 104 |   58 |   96 |   78 |   46 |   96 |   77 |   83 |        534 | 100 | Zachery   |
+| 104 |   58 |   96 |   78 |   46 |   96 |   77 |   83 |        534 | 101 | Susan     |
+| 105 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 | 100 | Zachery   |
+| 105 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 | 101 | Susan     |
+| 106 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |        403 | 100 | Zachery   |
+| 106 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |        403 | 101 | Susan     |
+| 107 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 | 100 | Zachery   |
+| 107 |   25 |   54 |   89 |   76 |   95 |   87 |   56 |        482 | 101 | Susan     |
+| 108 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 | 100 | Zachery   |
+| 108 |   78 |   55 |   86 |   63 |   54 |   89 |   75 |        500 | 101 | Susan     |
++-----+------+------+------+------+------+------+------+------------+-----+-----------+
+18 rows in set (0.00 sec)
+
+mysql> SELECT * FROM MARK AS M INNER JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4
+    -> WHERE M.ID=T4.ID;
++-----+------+------+------+------+------+------+------+------------+-----+-----------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  | Total_Mark | ID  | FIRSTNAME |
++-----+------+------+------+------+------+------+------+------------+-----+-----------+
+| 100 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 | 100 | Zachery   |
+| 101 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |        403 | 101 | Susan     |
++-----+------+------+------+------+------+------+------+------------+-----+-----------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT * FROM MARK AS M NATURAL INNER JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'INNER JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.' at line 1
+mysql> SELECT * FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID; 
++-----+------+------+------+------+------+------+------+------------+-----------+
+| ID  | MATH | PHY  | CHEM | ENG  | BIO  | ECO  | HIS  | Total_Mark | FIRSTNAME |
++-----+------+------+------+------+------+------+------+------------+-----------+
+| 100 |   55 |   45 |   56 |   87 |   21 |   52 |   89 |        405 | Zachery   |
+| 101 |   75 |   55 | NULL |   64 |   90 |   61 |   58 |        403 | Susan     |
++-----+------+------+------+------+------+------+------+------------+-----------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT FIRSTNAME,MAX(Total_Mark)
+    -> FROM(
+    -> SELECT * FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID
+    -> ) AS STU_10, STUDENTDETAILS
+    -> WHERE STU_10.ID=STUDENTDETAILS.ID;
+ERROR 1052 (23000): Column 'FIRSTNAME' in field list is ambiguous
+mysql> SELECT FIRSTNAME,MAX(Total_Mark) FROM( SELECT * FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID ) AS STU_10;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'STU_10.FIRSTNAME'; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT STUDENTDETAILS.FIRSTNAME,MAX(Total_Mark) FROM( SELECT * FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID ) AS STU_10, STUDENTDETAILS WHERE STU_10.ID=STUDENTDETAILS.ID;
+ERROR 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column 'student.STUDENTDETAILS.FirstName'; this is incompatible with sql_mode=only_full_group_by
+mysql> SELECT MAX(Total_Mark) FROM( SELECT * FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID ) AS STU_10;
++-----------------+
+| MAX(Total_Mark) |
++-----------------+
+|             405 |
++-----------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID ORDER BY DESC LIMIT 1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC LIMIT 1' at line 1
+mysql> SELECT FIRSTNAME FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID ORDER BY DESC LIMIT=1;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DESC LIMIT=1' at line 1
+mysql> SELECT FIRSTNAME FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID LIMIT 1 ORDER BY DESC;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'ORDER BY DESC' at line 1
+mysql> SELECT FIRSTNAME, TOTAL_MARK
+    -> FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID 
+    -> ORDER BY TOTAL_MARK DESC
+    -> LIMIT 1;
++-----------+------------+
+| FIRSTNAME | TOTAL_MARK |
++-----------+------------+
+| Zachery   |        405 |
++-----------+------------+
+1 row in set (0.00 sec)
+
+mysql> SELECT FIRSTNAME, TOTAL_MARK FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID  ORDER BY TOTAL_MARK LIMIT 1;
++-----------+------------+
+| FIRSTNAME | TOTAL_MARK |
++-----------+------------+
+| Susan     |        403 |
++-----------+------------+
+1 row in set (0.00 sec)
+
+mysql> 

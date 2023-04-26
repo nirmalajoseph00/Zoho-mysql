@@ -1,0 +1,626 @@
+Last login: Wed Apr 26 08:03:16 on ttys000
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+nirmala-pt7167:~ nirmala-pt7167$ mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 30
+Server version: 5.7.41 Homebrew
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> USE NIRMALA;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| BINARY1           |
+| BOOKS             |
+| COURSE            |
+| COURSE_CREDITS    |
+| COURSE_DETAILS    |
+| Child2            |
+| Child3            |
+| Customer          |
+| EE_CLASS_DETAILS  |
+| Employee          |
+| ORDERS            |
+| PREREQ            |
+| Parent            |
+| STRINGS1          |
+| STUDENTS          |
+| STUDENT_COURSE    |
+| STUDENT_HOBBY     |
+| STUDENT_LIST      |
+| TEACHERS          |
+| TIME1             |
+| TIMEZONE_TEST     |
+| Users             |
+| YR_LEVEL          |
++-------------------+
+23 rows in set (0.00 sec)
+
+mysql> SELECT FirstName,LastName,Country FROM Customer
+    -> UNION
+    -> SELECT FirstName,LastName,Country FROM CustomerUSA;
++------------+---------------+----------------+
+| FirstName  | LastName      | Country        |
++------------+---------------+----------------+
+| Luís       | Gonçalves     | Brazil         |
+| Leonie     | Köhler        | Germany        |
+| François   | Tremblay      | Canada         |
+| Bjørn      | Hansen        | Norway         |
+| František  | Wichterlová   | Czech Republic |
+| Helena     | Holý          | Czech Republic |
+| Astrid     | Gruber        | Austria        |
+| Daan       | Peeters       | Belgium        |
+| Kara       | Nielsen       | Denmark        |
+| Eduardo    | Martins       | Brazil         |
+| Alexandre  | Rocha         | Brazil         |
+| Roberto    | Almeida       | Brazil         |
+| Fernanda   | Ramos         | Brazil         |
+| Mark       | Philips       | Canada         |
+| Jennifer   | Peterson      | Canada         |
+| Frank      | Harris        | USA            |
+| Jack       | Smith         | USA            |
+| Michelle   | Brooks        | USA            |
+| Tim        | Goyer         | USA            |
+| Dan        | Miller        | USA            |
+| Kathy      | Chase         | USA            |
+| Heather    | Leacock       | USA            |
+| John       | Gordon        | USA            |
+| Frank      | Ralston       | USA            |
+| Victor     | Stevens       | USA            |
+| Richard    | Cunningham    | USA            |
+| Patrick    | Gray          | USA            |
+| Julia      | Barnett       | USA            |
+| Robert     | Brown         | Canada         |
+| Edward     | Francis       | Canada         |
+| Martha     | Silk          | Canada         |
+| Aaron      | Mitchell      | Canada         |
+| Ellie      | Sullivan      | Canada         |
+| João       | Fernandes     | Portugal       |
+| Madalena   | Sampaio       | Portugal       |
+| Hannah     | Schneider     | Germany        |
+| Fynn       | Zimmermann    | Germany        |
+| Niklas     | Schröder      | Germany        |
+| Camille    | Bernard       | France         |
+| Dominique  | Lefebvre      | France         |
+| Marc       | Dubois        | France         |
+| Wyatt      | Girard        | France         |
+| Isabelle   | Mercier       | France         |
+| Terhi      | Hämäläinen    | Finland        |
+| Ladislav   | Kovács        | Hungary        |
+| Hugh       | O'Reilly      | Ireland        |
+| Lucas      | Mancini       | Italy          |
+| Johannes   | Van der Berg  | Netherlands    |
+| Stanisław  | Wójcik        | Poland         |
+| Enrique    | Muñoz         | Spain          |
+| Joakim     | Johansson     | Sweden         |
+| Emma       | Jones         | United Kingdom |
+| Phil       | Hughes        | United Kingdom |
+| Steve      | Murray        | United Kingdom |
+| Mark       | Taylor        | Australia      |
+| Diego      | Gutiérrez     | Argentina      |
+| Luis       | Rojas         | Chile          |
+| Manoj      | Pareek        | India          |
+| Puja       | Srivastava    | India          |
++------------+---------------+----------------+
+59 rows in set (0.00 sec)
+
+mysql> SELECT FirstName,LastName,Country FROM Customer UNION ALL SELECT FirstName,LastName,Country FROM CustomerUSA;
++------------+---------------+----------------+
+| FirstName  | LastName      | Country        |
++------------+---------------+----------------+
+| Luís       | Gonçalves     | Brazil         |
+| Leonie     | Köhler        | Germany        |
+| François   | Tremblay      | Canada         |
+| Bjørn      | Hansen        | Norway         |
+| František  | Wichterlová   | Czech Republic |
+| Helena     | Holý          | Czech Republic |
+| Astrid     | Gruber        | Austria        |
+| Daan       | Peeters       | Belgium        |
+| Kara       | Nielsen       | Denmark        |
+| Eduardo    | Martins       | Brazil         |
+| Alexandre  | Rocha         | Brazil         |
+| Roberto    | Almeida       | Brazil         |
+| Fernanda   | Ramos         | Brazil         |
+| Mark       | Philips       | Canada         |
+| Jennifer   | Peterson      | Canada         |
+| Frank      | Harris        | USA            |
+| Jack       | Smith         | USA            |
+| Michelle   | Brooks        | USA            |
+| Tim        | Goyer         | USA            |
+| Dan        | Miller        | USA            |
+| Kathy      | Chase         | USA            |
+| Heather    | Leacock       | USA            |
+| John       | Gordon        | USA            |
+| Frank      | Ralston       | USA            |
+| Victor     | Stevens       | USA            |
+| Richard    | Cunningham    | USA            |
+| Patrick    | Gray          | USA            |
+| Julia      | Barnett       | USA            |
+| Robert     | Brown         | Canada         |
+| Edward     | Francis       | Canada         |
+| Martha     | Silk          | Canada         |
+| Aaron      | Mitchell      | Canada         |
+| Ellie      | Sullivan      | Canada         |
+| João       | Fernandes     | Portugal       |
+| Madalena   | Sampaio       | Portugal       |
+| Hannah     | Schneider     | Germany        |
+| Fynn       | Zimmermann    | Germany        |
+| Niklas     | Schröder      | Germany        |
+| Camille    | Bernard       | France         |
+| Dominique  | Lefebvre      | France         |
+| Marc       | Dubois        | France         |
+| Wyatt      | Girard        | France         |
+| Isabelle   | Mercier       | France         |
+| Terhi      | Hämäläinen    | Finland        |
+| Ladislav   | Kovács        | Hungary        |
+| Hugh       | O'Reilly      | Ireland        |
+| Lucas      | Mancini       | Italy          |
+| Johannes   | Van der Berg  | Netherlands    |
+| Stanisław  | Wójcik        | Poland         |
+| Enrique    | Muñoz         | Spain          |
+| Joakim     | Johansson     | Sweden         |
+| Emma       | Jones         | United Kingdom |
+| Phil       | Hughes        | United Kingdom |
+| Steve      | Murray        | United Kingdom |
+| Mark       | Taylor        | Australia      |
+| Diego      | Gutiérrez     | Argentina      |
+| Luis       | Rojas         | Chile          |
+| Manoj      | Pareek        | India          |
+| Puja       | Srivastava    | India          |
+| Frank      | Harris        | USA            |
+| Jack       | Smith         | USA            |
+| Michelle   | Brooks        | USA            |
+| Tim        | Goyer         | USA            |
+| Dan        | Miller        | USA            |
+| Kathy      | Chase         | USA            |
+| Heather    | Leacock       | USA            |
+| John       | Gordon        | USA            |
+| Frank      | Ralston       | USA            |
+| Victor     | Stevens       | USA            |
+| Richard    | Cunningham    | USA            |
+| Patrick    | Gray          | USA            |
+| Julia      | Barnett       | USA            |
++------------+---------------+----------------+
+72 rows in set (0.00 sec)
+
+mysql> #with duplicates
+mysql> 
+mysql> SELECT FirstName,LastName,Country FROM Customer UNION SELECT FirstName,LastName,Country FROM CustomerUSA
+    -> ORDER BY COUNTRY DESC;
++------------+---------------+----------------+
+| FirstName  | LastName      | Country        |
++------------+---------------+----------------+
+| Frank      | Ralston       | USA            |
+| Tim        | Goyer         | USA            |
+| Julia      | Barnett       | USA            |
+| John       | Gordon        | USA            |
+| Michelle   | Brooks        | USA            |
+| Patrick    | Gray          | USA            |
+| Heather    | Leacock       | USA            |
+| Jack       | Smith         | USA            |
+| Richard    | Cunningham    | USA            |
+| Kathy      | Chase         | USA            |
+| Frank      | Harris        | USA            |
+| Victor     | Stevens       | USA            |
+| Dan        | Miller        | USA            |
+| Steve      | Murray        | United Kingdom |
+| Phil       | Hughes        | United Kingdom |
+| Emma       | Jones         | United Kingdom |
+| Joakim     | Johansson     | Sweden         |
+| Enrique    | Muñoz         | Spain          |
+| Madalena   | Sampaio       | Portugal       |
+| João       | Fernandes     | Portugal       |
+| Stanisław  | Wójcik        | Poland         |
+| Bjørn      | Hansen        | Norway         |
+| Johannes   | Van der Berg  | Netherlands    |
+| Lucas      | Mancini       | Italy          |
+| Hugh       | O'Reilly      | Ireland        |
+| Puja       | Srivastava    | India          |
+| Manoj      | Pareek        | India          |
+| Ladislav   | Kovács        | Hungary        |
+| Niklas     | Schröder      | Germany        |
+| Fynn       | Zimmermann    | Germany        |
+| Hannah     | Schneider     | Germany        |
+| Leonie     | Köhler        | Germany        |
+| Wyatt      | Girard        | France         |
+| Marc       | Dubois        | France         |
+| Dominique  | Lefebvre      | France         |
+| Camille    | Bernard       | France         |
+| Isabelle   | Mercier       | France         |
+| Terhi      | Hämäläinen    | Finland        |
+| Kara       | Nielsen       | Denmark        |
+| Helena     | Holý          | Czech Republic |
+| František  | Wichterlová   | Czech Republic |
+| Luis       | Rojas         | Chile          |
+| Robert     | Brown         | Canada         |
+| Jennifer   | Peterson      | Canada         |
+| Ellie      | Sullivan      | Canada         |
+| Mark       | Philips       | Canada         |
+| Aaron      | Mitchell      | Canada         |
+| Martha     | Silk          | Canada         |
+| François   | Tremblay      | Canada         |
+| Edward     | Francis       | Canada         |
+| Luís       | Gonçalves     | Brazil         |
+| Eduardo    | Martins       | Brazil         |
+| Fernanda   | Ramos         | Brazil         |
+| Roberto    | Almeida       | Brazil         |
+| Alexandre  | Rocha         | Brazil         |
+| Daan       | Peeters       | Belgium        |
+| Astrid     | Gruber        | Austria        |
+| Mark       | Taylor        | Australia      |
+| Diego      | Gutiérrez     | Argentina      |
++------------+---------------+----------------+
+59 rows in set (0.00 sec)
+
+mysql> SELECT FirstName,LastName,Country FROM Customer EXCEPT SELECT FirstName,LastName,Country FROM CustomerUSA;            
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'SELECT FirstName,LastName,Country FROM CustomerUSA' at line 1
+mysql> #except not supported in mysql
+mysql> 
+mysql> SELECT FirstName,LastName,Country FROM Customer
+    -> WHERE CustomerId NOT IN(SELECT CUSTOMERID FROM CUSTOMERUSA);
++------------+---------------+----------------+
+| FirstName  | LastName      | Country        |
++------------+---------------+----------------+
+| Luís       | Gonçalves     | Brazil         |
+| Leonie     | Köhler        | Germany        |
+| François   | Tremblay      | Canada         |
+| Bjørn      | Hansen        | Norway         |
+| František  | Wichterlová   | Czech Republic |
+| Helena     | Holý          | Czech Republic |
+| Astrid     | Gruber        | Austria        |
+| Daan       | Peeters       | Belgium        |
+| Kara       | Nielsen       | Denmark        |
+| Eduardo    | Martins       | Brazil         |
+| Alexandre  | Rocha         | Brazil         |
+| Roberto    | Almeida       | Brazil         |
+| Fernanda   | Ramos         | Brazil         |
+| Mark       | Philips       | Canada         |
+| Jennifer   | Peterson      | Canada         |
+| Robert     | Brown         | Canada         |
+| Edward     | Francis       | Canada         |
+| Martha     | Silk          | Canada         |
+| Aaron      | Mitchell      | Canada         |
+| Ellie      | Sullivan      | Canada         |
+| João       | Fernandes     | Portugal       |
+| Madalena   | Sampaio       | Portugal       |
+| Hannah     | Schneider     | Germany        |
+| Fynn       | Zimmermann    | Germany        |
+| Niklas     | Schröder      | Germany        |
+| Camille    | Bernard       | France         |
+| Dominique  | Lefebvre      | France         |
+| Marc       | Dubois        | France         |
+| Wyatt      | Girard        | France         |
+| Isabelle   | Mercier       | France         |
+| Terhi      | Hämäläinen    | Finland        |
+| Ladislav   | Kovács        | Hungary        |
+| Hugh       | O'Reilly      | Ireland        |
+| Lucas      | Mancini       | Italy          |
+| Johannes   | Van der Berg  | Netherlands    |
+| Stanisław  | Wójcik        | Poland         |
+| Enrique    | Muñoz         | Spain          |
+| Joakim     | Johansson     | Sweden         |
+| Emma       | Jones         | United Kingdom |
+| Phil       | Hughes        | United Kingdom |
+| Steve      | Murray        | United Kingdom |
+| Mark       | Taylor        | Australia      |
+| Diego      | Gutiérrez     | Argentina      |
+| Luis       | Rojas         | Chile          |
+| Manoj      | Pareek        | India          |
+| Puja       | Srivastava    | India          |
++------------+---------------+----------------+
+46 rows in set (0.01 sec)
+
+mysql> SELECT C.FirstName, C.LastName, C.Country FROM CustomerUSA AS CU LEFT JOIN CUSTOMER AS C ON C.CustomerId=CU.CustomerId;
++-----------+------------+---------+
+| FirstName | LastName   | Country |
++-----------+------------+---------+
+| Frank     | Harris     | USA     |
+| Jack      | Smith      | USA     |
+| Michelle  | Brooks     | USA     |
+| Tim       | Goyer      | USA     |
+| Dan       | Miller     | USA     |
+| Kathy     | Chase      | USA     |
+| Heather   | Leacock    | USA     |
+| John      | Gordon     | USA     |
+| Frank     | Ralston    | USA     |
+| Victor    | Stevens    | USA     |
+| Richard   | Cunningham | USA     |
+| Patrick   | Gray       | USA     |
+| Julia     | Barnett    | USA     |
++-----------+------------+---------+
+13 rows in set (0.01 sec)
+
+mysql> # CU - C
+mysql> 
+mysql> #intersect not supported in mysql
+mysql> 
+mysql> SELECT FirstName,LastName,Country FROM Customer 
+    -> WHERE CustomerId IN (SELECT CustomerId FROM CustomerUSA);
++-----------+------------+---------+
+| FirstName | LastName   | Country |
++-----------+------------+---------+
+| Frank     | Harris     | USA     |
+| Jack      | Smith      | USA     |
+| Michelle  | Brooks     | USA     |
+| Tim       | Goyer      | USA     |
+| Dan       | Miller     | USA     |
+| Kathy     | Chase      | USA     |
+| Heather   | Leacock    | USA     |
+| John      | Gordon     | USA     |
+| Frank     | Ralston    | USA     |
+| Victor    | Stevens    | USA     |
+| Richard   | Cunningham | USA     |
+| Patrick   | Gray       | USA     |
+| Julia     | Barnett    | USA     |
++-----------+------------+---------+
+13 rows in set (0.00 sec)
+
+mysql> #using Join
+mysql> 
+mysql> SELECT C.FirstName, C.LastName, C.Country FROM CustomerUSA AS CU INNER JOIN CUSTOMER AS C ON C.CustomerId=CU.CustomerId;
++-----------+------------+---------+
+| FirstName | LastName   | Country |
++-----------+------------+---------+
+| Frank     | Harris     | USA     |
+| Jack      | Smith      | USA     |
+| Michelle  | Brooks     | USA     |
+| Tim       | Goyer      | USA     |
+| Dan       | Miller     | USA     |
+| Kathy     | Chase      | USA     |
+| Heather   | Leacock    | USA     |
+| John      | Gordon     | USA     |
+| Frank     | Ralston    | USA     |
+| Victor    | Stevens    | USA     |
+| Richard   | Cunningham | USA     |
+| Patrick   | Gray       | USA     |
+| Julia     | Barnett    | USA     |
++-----------+------------+---------+
+13 rows in set (0.00 sec)
+
+mysql> 
+mysql> 
+mysql> #subqueries
+mysql> 
+mysql> SELECT * TEACHERS;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'TEACHERS' at line 1
+mysql> SELECT * FROM TEACHERS;
++-----+---------+-----------+
+| TID | NAME    | COURSE_ID |
++-----+---------+-----------+
+|   1 | Maya    | CS-101    |
+|   2 | Anu     | BIO-301   |
+|   3 | Patrick | CS-315    |
++-----+---------+-----------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM TEACHERSALARY;
++-----+--------+
+| TID | SALARY |
++-----+--------+
+|   1 |  50000 |
+|   2 |  75000 |
+|   3 |  67000 |
++-----+--------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT NAME
+    -> FROM TEACHERS AS T INNER JOIN TEACHERSALARY AS TS ON T.TID=TS.TID
+    -> WHERE SALARY<70000;
++---------+
+| NAME    |
++---------+
+| Maya    |
+| Patrick |
++---------+
+2 rows in set (0.00 sec)
+
+mysql> SELECT NAME
+    -> FROM TEACHERS 
+    -> WHERE TID IN(SELECT TID FROM TEACHERSALARY WHERE SALARY<70000);
++---------+
+| NAME    |
++---------+
+| Maya    |
+| Patrick |
++---------+
+2 rows in set (0.01 sec)
+
+mysql> SELECT NAME FROM TEACHERS WHERE EXISTS(SELECT * FROM TEACHERSALARY WHERE SALARY<70000 AND TID=TEACHERS.TID);
++---------+
+| NAME    |
++---------+
+| Maya    |
+| Patrick |
++---------+
+2 rows in set (0.00 sec)
+
+mysql> CREATE TABLE CustomerCanada(
+    ->   CustomerId int(11) DEFAULT NULL,
+    ->   FirstName varchar(50) DEFAULT NULL,
+    ->   LastName varchar(50) DEFAULT NULL,
+    ->   Company varchar(50) DEFAULT NULL,
+    ->   Address varchar(50) DEFAULT NULL,
+    ->   City varchar(50) DEFAULT NULL,
+    ->   State varchar(50) DEFAULT NULL,
+    ->   Country varchar(50) DEFAULT NULL,
+    ->   PostalCode varchar(50) DEFAULT NULL,
+    ->   Phone varchar(50) DEFAULT NULL,
+    ->   Fax varchar(50) DEFAULT NULL,
+    ->   Email varchar(50) DEFAULT NULL,
+    ->   SupportRepId int(11) DEFAULT NULL
+    -> );
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> #subquery with insert
+mysql> 
+mysql> INSERT INTO CustomerUSA
+    -> SELECT *
+    -> FROM Customer 
+    -> WHERE COUNTRY='Canada';
+Query OK, 8 rows affected (0.00 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> INSERT INTO CustomerCanada SELECT * FROM Customer  WHERE COUNTRY='Canada';
+Query OK, 8 rows affected (0.00 sec)
+Records: 8  Duplicates: 0  Warnings: 0
+
+mysql> SELECT FirstName,LastName,Country FROM CustomerCanada;
++-----------+----------+---------+
+| FirstName | LastName | Country |
++-----------+----------+---------+
+| François  | Tremblay | Canada  |
+| Mark      | Philips  | Canada  |
+| Jennifer  | Peterson | Canada  |
+| Robert    | Brown    | Canada  |
+| Edward    | Francis  | Canada  |
+| Martha    | Silk     | Canada  |
+| Aaron     | Mitchell | Canada  |
+| Ellie     | Sullivan | Canada  |
++-----------+----------+---------+
+8 rows in set (0.00 sec)
+
+mysql> SELECT FirstName,LastName,Country FROM CustomerUSA;
++-----------+------------+---------+
+| FirstName | LastName   | Country |
++-----------+------------+---------+
+| Frank     | Harris     | USA     |
+| Jack      | Smith      | USA     |
+| Michelle  | Brooks     | USA     |
+| Tim       | Goyer      | USA     |
+| Dan       | Miller     | USA     |
+| Kathy     | Chase      | USA     |
+| Heather   | Leacock    | USA     |
+| John      | Gordon     | USA     |
+| Frank     | Ralston    | USA     |
+| Victor    | Stevens    | USA     |
+| Richard   | Cunningham | USA     |
+| Patrick   | Gray       | USA     |
+| Julia     | Barnett    | USA     |
+| François  | Tremblay   | Canada  |
+| Mark      | Philips    | Canada  |
+| Jennifer  | Peterson   | Canada  |
+| Robert    | Brown      | Canada  |
+| Edward    | Francis    | Canada  |
+| Martha    | Silk       | Canada  |
+| Aaron     | Mitchell   | Canada  |
+| Ellie     | Sullivan   | Canada  |
++-----------+------------+---------+
+21 rows in set (0.00 sec)
+
+mysql> DELETE FROM CustomerUSA WHERE CustomerId IN (SELECT CustomerId FROM CustomerCanada);
+Query OK, 8 rows affected (0.00 sec)
+
+mysql> SELECT FirstName,LastName,Country FROM CustomerUSA;
++-----------+------------+---------+
+| FirstName | LastName   | Country |
++-----------+------------+---------+
+| Frank     | Harris     | USA     |
+| Jack      | Smith      | USA     |
+| Michelle  | Brooks     | USA     |
+| Tim       | Goyer      | USA     |
+| Dan       | Miller     | USA     |
+| Kathy     | Chase      | USA     |
+| Heather   | Leacock    | USA     |
+| John      | Gordon     | USA     |
+| Frank     | Ralston    | USA     |
+| Victor    | Stevens    | USA     |
+| Richard   | Cunningham | USA     |
+| Patrick   | Gray       | USA     |
+| Julia     | Barnett    | USA     |
++-----------+------------+---------+
+13 rows in set (0.00 sec)
+
+mysql> UPDATE CUSTOMER
+    -> SET FIRSTNAME=FIRSTNAME+' II'
+    -> WHERE FIRSTNAME IN (SELECT FIRSTNAME FROM EMPLOYEE);
+ERROR 1292 (22007): Truncated incorrect DOUBLE value: 'Robert'
+mysql> UPDATE CUSTOMER SET FIRSTNAME= CONCAT(FIRSTNAME+' II)' WHERE FIRSTNAME IN (SELECT FIRSTNAME FROM EMPLOYEE);
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'WHERE FIRSTNAME IN (SELECT FIRSTNAME FROM EMPLOYEE)' at line 1
+mysql> UPDATE CUSTOMER 
+    -> SET FIRSTNAME= CONCAT(FIRSTNAME,' II')
+    -> WHERE FIRSTNAME IN (SELECT FIRSTNAME FROM EMPLOYEE);
+Query OK, 2 rows affected (0.00 sec)
+Rows matched: 2  Changed: 2  Warnings: 0
+
+mysql> SELECT FirstName,LastName,Country FROM Customer;
++------------+---------------+----------------+
+| FirstName  | LastName      | Country        |
++------------+---------------+----------------+
+| Luís       | Gonçalves     | Brazil         |
+| Leonie     | Köhler        | Germany        |
+| François   | Tremblay      | Canada         |
+| Bjørn      | Hansen        | Norway         |
+| František  | Wichterlová   | Czech Republic |
+| Helena     | Holý          | Czech Republic |
+| Astrid     | Gruber        | Austria        |
+| Daan       | Peeters       | Belgium        |
+| Kara       | Nielsen       | Denmark        |
+| Eduardo    | Martins       | Brazil         |
+| Alexandre  | Rocha         | Brazil         |
+| Roberto    | Almeida       | Brazil         |
+| Fernanda   | Ramos         | Brazil         |
+| Mark       | Philips       | Canada         |
+| Jennifer   | Peterson      | Canada         |
+| Frank      | Harris        | USA            |
+| Jack       | Smith         | USA            |
+| Michelle   | Brooks        | USA            |
+| Tim        | Goyer         | USA            |
+| Dan        | Miller        | USA            |
+| Kathy      | Chase         | USA            |
+| Heather    | Leacock       | USA            |
+| John       | Gordon        | USA            |
+| Frank      | Ralston       | USA            |
+| Victor     | Stevens       | USA            |
+| Richard    | Cunningham    | USA            |
+| Patrick    | Gray          | USA            |
+| Julia      | Barnett       | USA            |
+| Robert  II | Brown         | Canada         |
+| Edward     | Francis       | Canada         |
+| Martha     | Silk          | Canada         |
+| Aaron      | Mitchell      | Canada         |
+| Ellie      | Sullivan      | Canada         |
+| João       | Fernandes     | Portugal       |
+| Madalena   | Sampaio       | Portugal       |
+| Hannah     | Schneider     | Germany        |
+| Fynn       | Zimmermann    | Germany        |
+| Niklas     | Schröder      | Germany        |
+| Camille    | Bernard       | France         |
+| Dominique  | Lefebvre      | France         |
+| Marc       | Dubois        | France         |
+| Wyatt      | Girard        | France         |
+| Isabelle   | Mercier       | France         |
+| Terhi      | Hämäläinen    | Finland        |
+| Ladislav   | Kovács        | Hungary        |
+| Hugh       | O'Reilly      | Ireland        |
+| Lucas      | Mancini       | Italy          |
+| Johannes   | Van der Berg  | Netherlands    |
+| Stanisław  | Wójcik        | Poland         |
+| Enrique    | Muñoz         | Spain          |
+| Joakim     | Johansson     | Sweden         |
+| Emma       | Jones         | United Kingdom |
+| Phil       | Hughes        | United Kingdom |
+| Steve  II  | Murray        | United Kingdom |
+| Mark       | Taylor        | Australia      |
+| Diego      | Gutiérrez     | Argentina      |
+| Luis       | Rojas         | Chile          |
+| Manoj      | Pareek        | India          |
+| Puja       | Srivastava    | India          |
++------------+---------------+----------------+
+59 rows in set (0.00 sec)
+
+mysql> 
