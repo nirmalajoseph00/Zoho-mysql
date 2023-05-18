@@ -1,0 +1,401 @@
+Last login: Thu Apr 27 11:59:22 on ttys001
+
+The default interactive shell is now zsh.
+To update your account to use zsh, please run `chsh -s /bin/zsh`.
+For more details, please visit https://support.apple.com/kb/HT208050.
+nirmala-pt7167:~ nirmala-pt7167$ mysql -u root
+Welcome to the MySQL monitor.  Commands end with ; or \g.
+Your MySQL connection id is 34
+Server version: 5.7.41 Homebrew
+
+Copyright (c) 2000, 2023, Oracle and/or its affiliates.
+
+Oracle is a registered trademark of Oracle Corporation and/or its
+affiliates. Other names may be trademarks of their respective
+owners.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+mysql> SHOW DATABASE;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'DATABASE' at line 1
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| NIRMALA            |
+| STUDENT            |
+| mysql              |
+| performance_schema |
+| sys                |
+| tutorial           |
++--------------------+
+7 rows in set (0.00 sec)
+
+mysql> USE STUDENT;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES
+    -> ;
++-------------------+
+| Tables_in_student |
++-------------------+
+| MARK              |
+| MARK_PRE          |
+| STUDENTDETAILS    |
+| student_marks     |
++-------------------+
+4 rows in set (0.00 sec)
+
+mysql> USE NIRMALA;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| ACID_PROP         |
+| BINARY1           |
+| BOOKS             |
+| COURSE            |
+| COURSE_CREDITS    |
+| COURSE_DETAILS    |
+| Child2            |
+| Child3            |
+| Customer          |
+| CustomerCanada    |
+| CustomerUSA       |
+| EE_CLASS_DETAILS  |
+| Employee          |
+| ORDERS            |
+| PREREQ            |
+| PRODUCT           |
+| Parent            |
+| SALES             |
+| STRINGS1          |
+| STUDENTS          |
+| STUDENT_COURSE    |
+| STUDENT_HOBBY     |
+| STUDENT_LIST      |
+| TEACHERS          |
+| TEACHERSALARY     |
+| TIME1             |
+| TIMEZONE_TEST     |
+| Users             |
+| YR_LEVEL          |
++-------------------+
+29 rows in set (0.01 sec)
+
+mysql> SHOW GLOBAL VARIABLES LIKE 'PORT';
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| port          | 3306  |
++---------------+-------+
+1 row in set (0.01 sec)
+
+mysql> DESCRIBE STUDENTS;
++-----------+-------------------+------+-----+---------+-------+
+| Field     | Type              | Null | Key | Default | Extra |
++-----------+-------------------+------+-----+---------+-------+
+| ID        | char(3)           | NO   | PRI | NULL    |       |
+| ROLL_NO   | smallint(6)       | NO   | PRI | NULL    |       |
+| FNAME     | varchar(50)       | NO   |     | NULL    |       |
+| LNAME     | varchar(70)       | YES  |     | NULL    |       |
+| DOB       | date              | YES  |     | NULL    |       |
+| DEPT_CODE | char(4)           | YES  |     | NULL    |       |
+| GENDER    | enum('M','F','O') | YES  |     | NULL    |       |
+| FEES      | int(11)           | YES  |     | 5000    |       |
+| COURSE    | varchar(30)       | YES  |     | NULL    |       |
++-----------+-------------------+------+-----+---------+-------+
+9 rows in set (0.05 sec)
+
+mysql> SELECT * FROM STUDENTS;
++-----+---------+-------+----------+------------+-----------+--------+------+--------+
+| ID  | ROLL_NO | FNAME | LNAME    | DOB        | DEPT_CODE | GENDER | FEES | COURSE |
++-----+---------+-------+----------+------------+-----------+--------+------+--------+
+| S01 |    1001 | Lallu | Dubey    | 1999-01-06 | CS01      | M      | 5000 | CS-101 |
+| S02 |    1002 | Priya | Kumari   | 1998-12-04 | EE01      | F      | 5000 | NULL   |
+| S03 |    1003 | Lilly | Erickson | 2000-05-21 | CS02      | F      | 6700 | CS-315 |
++-----+---------+-------+----------+------------+-----------+--------+------+--------+
+3 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS;
++-----+---------+--------+----------+------------+-----------+--------+------+--------+
+| ID  | ROLL_NO | FNAME  | LNAME    | DOB        | DEPT_CODE | GENDER | FEES | COURSE |
++-----+---------+--------+----------+------------+-----------+--------+------+--------+
+| S01 |    1001 | Lallu  | Dubey    | 1999-01-06 | CS01      | M      | 5000 | CS-101 |
+| S02 |    1002 | Priya  | Kumari   | 1998-12-04 | EE01      | F      | 5000 | NULL   |
+| S03 |    1003 | Lilly  | Erickson | 2000-05-21 | CS02      | F      | 6700 | CS-315 |
+| SO4 |    1005 | Dearaj | Mehta    | 1997-06-12 | EC02      | M      | 7000 | EC-203 |
++-----+---------+--------+----------+------------+-----------+--------+------+--------+
+4 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS;
++-----+---------+--------+----------+------------+-----------+--------+------+--------+
+| ID  | ROLL_NO | FNAME  | LNAME    | DOB        | DEPT_CODE | GENDER | FEES | COURSE |
++-----+---------+--------+----------+------------+-----------+--------+------+--------+
+| S01 |    1001 | Lallu  | Dubey    | 1999-01-06 | CS01      | M      | 5000 | CS-101 |
+| S02 |    1002 | Priya  | Kumari   | 1998-12-04 | EE01      | F      | 5000 | NULL   |
+| S03 |    1003 | Lilly  | Erickson | 2000-05-21 | CS02      | F      | 6700 | CS-315 |
+| S05 |    1006 | Divya  | Sharma   | 1999-04-02 | CS03      | F      | 7500 | CS-315 |
+| SO4 |    1005 | Dearaj | Mehta    | 1997-06-12 | EC02      | M      | 7000 | EC-203 |
++-----+---------+--------+----------+------------+-----------+--------+------+--------+
+5 rows in set (0.00 sec)
+
+mysql> SELECT * FROM STUDENTS;
++-----+---------+--------+----------+------------+-----------+--------+------+--------+
+| ID  | ROLL_NO | FNAME  | LNAME    | DOB        | DEPT_CODE | GENDER | FEES | COURSE |
++-----+---------+--------+----------+------------+-----------+--------+------+--------+
+| S01 |    1001 | Lallu  | Dubey    | 1999-01-06 | CS01      | M      | 5000 | CS-101 |
+| S02 |    1002 | Priya  | Kumari   | 1998-12-04 | EE01      | F      | 5000 | NULL   |
+| S03 |    1003 | Lilly  | Erickson | 2000-05-21 | CS02      | F      | 6700 | CS-315 |
+| S05 |    1006 | Divya  | Sharma   | 1999-04-02 | CS03      | F      | 7500 | CS-315 |
+| S07 |    1009 | Jay    | Prakash  | 1999-09-03 | EE02      | M      | 4500 | EE-215 |
+| SO4 |    1005 | Dearaj | Mehta    | 1997-06-12 | EC02      | M      | 7000 | EC-203 |
++-----+---------+--------+----------+------------+-----------+--------+------+--------+
+6 rows in set (0.00 sec)
+
+mysql> SELECT @@TRANSACTION_ISOLATION;
++-------------------------+
+| @@TRANSACTION_ISOLATION |
++-------------------------+
+| REPEATABLE-READ         |
++-------------------------+
+1 row in set (0.01 sec)
+
+mysql> 
+mysql> 
+mysql> DELIMITER @
+mysql> DROP PROCEDURE IF EXISTS GET_ALL
+    -> @
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> CREATE PROCEDURE GET_ALL()
+    -> BEGIN
+    -> SELECT * FROM STUDENTS;
+    -> END
+    -> @
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> 
+mysql> 
+mysql> USE STUDENTDETAILS;
+ERROR 1049 (42000): Unknown database 'studentdetails'
+mysql> SHOW DATABASES;
++--------------------+
+| Database           |
++--------------------+
+| information_schema |
+| NIRMALA            |
+| STUDENT            |
+| mysql              |
+| performance_schema |
+| sys                |
+| tutorial           |
++--------------------+
+7 rows in set (0.01 sec)
+
+mysql> USE STUDENT;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> SHOW TABLES;
++-------------------+
+| Tables_in_student |
++-------------------+
+| MARK              |
+| MARK_PRE          |
+| STUDENTDETAILS    |
+| student_marks     |
++-------------------+
+4 rows in set (0.00 sec)
+
+mysql> DELIMITER @
+mysql> DROP PROCEDURE IF EXISTS GET_ALL
+    -> @
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> CREATE PROCEDURE GET_ALL() BEGIN SELECT * FROM STUDENTS; END@
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> SHOW GLOBAL VARIABLES LIKE 'PORT';
++---------------+-------+
+| Variable_name | Value |
++---------------+-------+
+| port          | 3306  |
++---------------+-------+
+1 row in set (0.01 sec)
+
+mysql> SELECT * FROM STUDENT DETAILS;
+ERROR 1146 (42S02): Table 'student.student' doesn't exist
+mysql> SELECT * FROM STUDENTDETAILS;
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+| ID  | FirstName | LastName | STD  | Branch | Gender | Email                     | DateOfBirth | YearOfAdmission |
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+| 100 | Zachery   | Erlich   |   10 | NA     | M      | zacheryerlich100@mail.com | 2000-12-17  |            2007 |
+| 101 | Susan     | McLain   |   10 | NA     | F      | susanmclain101@mail.com   | 2000-02-07  |            2007 |
+| 102 | Susan     | Barlet   |    9 | NA     | F      | susanbarlet102@mail.com   | 2001-03-27  |            2007 |
+| 103 | Joe       | McLain   |   11 | A1     | M      | joemclain103@mail.com     | 1999-06-02  |            2007 |
+| 104 | Zachery   | Erlich   |    9 | NA     | M      | zacheryerlich104@mail.com | 2001-01-15  |            2007 |
+| 105 | Susan     | Barlet   |   11 | A1     | F      | susanbarlet105@mail.com   | 1999-09-09  |            2010 |
+| 106 | Riya      | Sharma   |    9 | NA     | F      | riyasharma106@mail.com    | 2002-01-02  |            2010 |
+| 107 | Sanchit   | Kumar    |   11 | A2     | M      | sanchitkumar107@mail.com  | 1998-12-12  |            2005 |
+| 108 | Mohan     | Ashok    |   11 | A2     | M      | mohanashok108@mail.com    | 1999-07-02  |            2006 |
++-----+-----------+----------+------+--------+--------+---------------------------+-------------+-----------------+
+9 rows in set (0.01 sec)
+
+mysql> DELIMITER @
+mysql> CREATE PROCEDURE GET_ALL() BEGIN SELECT * FROM STUDENTDETAILS; END@
+ERROR 1304 (42000): PROCEDURE GET_ALL already exists
+mysql> DROP PROCEDURE IF EXISTS GET_ALL
+    -> @
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> CREATE PROCEDURE GET_ALL() BEGIN SELECT * FROM STUDENTDETAILS; END@
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DROP PROCEDURE IF EXISTS GET_YOA
+    -> @
+Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> CREATE PROCEDURE GET_YOA(IN SID INT, IN YOA YEAR)
+    -> BEGIN
+    -> UPDATE STUDENTDETAILS
+    -> SET YEAROFADMISSION=YOA
+    -> WHERE ID = SID
+    -> ;
+    -> END
+    -> @
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DROP PROCEDURE IF EXISTS GET_YOA@
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE PROCEDURE SET_YOA(IN SID INT, IN YOA YEAR)  BEGIN UPDATE STUDENTDETAILS SET YEAROFADMISSION=YOA WHERE ID = SID ; END@
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> DELIMITER @
+mysql> DROP PROCEDURE IF EXISTS GET_YOA@                                                                                     Query OK, 0 rows affected, 1 warning (0.00 sec)
+
+mysql> CREATE PROCEDURE GET_YOA(IN SID INT, IN YOA YEAR)  BEGIN UPDATE STUDENTDETAILS SET YEAROFADMISSION=YOA WHERE ID = SID ; END@
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DROP PROCEDURE IF EXISTS GET_YOA@                                                                                     Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE PROCEDURE GET_YOA(IN SID INT)  
+    -> BEGIN
+    -> SELECT YEAROFADMISSION
+    -> FROM STUDENTDETAILS
+    -> WHERE ID = SID;
+    -> END
+    -> @
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> DELIMITER @
+mysql> CREATE PROCEDURE GET_2000()
+    -> BEGIN
+    -> SELECT COUNT(*) AS StudentCountBornIn2000 FROM STUDENTDETAILS WHERE YEAR(DATEOFBIRTH)=2000;
+    -> END
+    -> @
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> SELECT COUNT(*) AS StudentCountBornIn2000 FROM STUDENTDETAILS WHERE YEAR(DATEOFBIRTH)=2000;                           +------------------------+
+| StudentCountBornIn2000 |
++------------------------+
+|                      2 |
++------------------------+
+1 row in set (0.00 sec)
+
+mysql> DROP PROCEDURE IF EXISTS GET_2000@
+    -> ;
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '@' at line 1
+mysql> DROP PROCEDURE IF EXISTS GET_2000;
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER @
+mysql> CREATE PROCEDURE GET_2000() BEGIN SELECT COUNT(*) AS StudentCountBornIn2000 FROM STUDENTDETAILS WHERE YEAR(DATEOFBIRTH)=2000; END@
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> DELIMITER ;
+mysql> DELIMITER @
+mysql> CREATE PROCEDURE GET_MAXMARK()
+    -> begin
+    -> SELECT FIRSTNAME, TOTAL_MARK
+    ->     -> FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID 
+    ->     -> ORDER BY TOTAL_MARK DESC
+    ->     -> LIMIT 1;
+    -> END
+    -> @
+ERROR 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near 'FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=1' at line 4
+mysql> CREATE PROCEDURE GET_MAXMARK()
+    -> BEGIN
+    -> SELECT FIRSTNAME, TOTAL_MARK
+    -> FROM MARK AS M NATURAL JOIN (SELECT ID,FIRSTNAME FROM STUDENTDETAILS WHERE STD=10) AS T4 WHERE M.ID=T4.ID      
+    -> ORDER BY TOTAL_MARK DESC
+    -> LIMIT 1;
+    -> END
+    -> @
+Query OK, 0 rows affected (0.00 sec)
+
+mysql> CREATE PROCEDURE GET_RECORD(IN SID INT)
+    -> BEGIN
+    -> SELECT * FROM STUDENTDETAILS
+    -> WHERE ID = SID;
+    -> END
+    -> @
+Query OK, 0 rows affected (0.01 sec)
+
+mysql> DELIMITER ;
+mysql> use nirmala;
+Reading table information for completion of table and column names
+You can turn off this feature to get a quicker startup with -A
+
+Database changed
+mysql> show tables;
++-------------------+
+| Tables_in_nirmala |
++-------------------+
+| ACID_PROP         |
+| BINARY1           |
+| BOOKS             |
+| COURSE            |
+| COURSE_CREDITS    |
+| COURSE_DETAILS    |
+| Child2            |
+| Child3            |
+| Customer          |
+| CustomerCanada    |
+| CustomerUSA       |
+| EE_CLASS_DETAILS  |
+| Employee          |
+| ORDERS            |
+| PREREQ            |
+| PRODUCT           |
+| Parent            |
+| SALES             |
+| STRINGS1          |
+| STUDENTS          |
+| STUDENT_COURSE    |
+| STUDENT_HOBBY     |
+| STUDENT_LIST      |
+| TEACHERS          |
+| TEACHERSALARY     |
+| TIME1             |
+| TIMEZONE_TEST     |
+| Users             |
+| YR_LEVEL          |
++-------------------+
+29 rows in set (0.00 sec)
+
+mysql> 
